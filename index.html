@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Aktivity – párty hra</title>
+<style>
+  :root{
+    --bg1:#0d6b1c;
+    --bg2:#0a4f15;
+    --card:#f9fafb;
+    --cardInner:#e5f7c8;
+    --text:#0f172a;
+    --muted:#6b7280;
+    --pill:#111827;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:radial-gradient(circle at 20% 0%,#27c254 0,var(--bg1) 40%,var(--bg2) 100%);
+    color:#0f172a;
+    display:flex;
+    justify-content:center;
+    align-items:stretch;
+  }
+  .app{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  h1{
+    margin:0 0 8px;
+    text-align:center;
+    color:#ffffff;
+    text-shadow:0 2px 6px rgba(0,0,0,0.5);
+    letter-spacing:0.03em;
+  }
+  .screen{
+    background:rgba(15,23,42,0.1);
+    border-radius:24px;
+    padding:16px;
+    backdrop-filter:blur(8px);
+  }
+  .hidden{display:none}
+
+  .setup-intro{
+    color:#e5e7eb;
+    text-align:center;
+    margin-bottom:12px;
+  }
+  #teamsContainer{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .team-row{
+    display:flex;
+    gap:8px;
+  }
+  .team-row input{
+    flex:1;
+    padding:10px 12px;
+    border-radius:999px;
+    border:none;
+    font-size:15px;
+    outline:none;
+  }
+  .team-row input::placeholder{color:#9ca3af}
+  .btn{
+    border:none;
+    border-radius:999px;
+    padding:10px 16px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    background:#f9fafb;
+    color:#0f172a;
+    box-shadow:0 3px 6px rgba(0,0,0,0.25);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    transition:transform 0.1s,box-shadow 0.1s;
+  }
+  .btn:active{
+    transform:translateY(1px);
+    box-shadow:0 1px 3px rgba(0,0,0,0.25);
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,#f97316,#fb923c);
+    color:white;
+  }
+  .btn-secondary{
+    background:rgba(15,23,42,0.85);
+    color:#e5e7eb;
+  }
+  .btn:disabled{
+    opacity:0.4;
+    cursor:default;
+    transform:none;
+    box-shadow:none;
+  }
+  .setup-actions{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .timer-pill{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    background:var(--pill);
+    color:#f9fafb;
+    padding:6px 14px;
+    border-radius:999px;
+    font-variant-numeric:tabular-nums;
+    box-shadow:0 4px 10px rgba(0,0,0,0.45);
+  }
+  .timer-pill span.icon{
+    font-size:16px;
+  }
+  .timer-input{
+    border:none;
+    background:transparent;
+    color:#f9fafb;
+    width:3.9em;
+    text-align:center;
+    font-size:20px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    outline:none;
+  }
+  .timer-input:disabled{
+    opacity:0.7;
+  }
+  .leader{
+    color:#fefce8;
+    font-weight:500;
+    text-shadow:0 2px 4px rgba(0,0,0,0.6);
+    text-align:right;
+    font-size:14px;
+  }
+
+  .scoreboard{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:10px;
+  }
+  .team-chip{
+    flex:1 1 calc(50% - 6px);
+    min-width:0;
+    background:rgba(15,23,42,0.85);
+    color:#e5e7eb;
+    border-radius:999px;
+    padding:6px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+    font-size:13px;
+  }
+  .team-chip span.name{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .team-chip span.score{
+    font-variant-numeric:tabular-nums;
+    font-weight:600;
+  }
+  .team-chip.current{
+    border:2px solid #fbbf24;
+  }
+  .team-chip.leader-chip{
+    box-shadow:0 0 0 2px rgba(34,197,94,0.7);
+  }
+
+  .turn-info{
+    color:#fefce8;
+    margin-bottom:6px;
+    font-weight:500;
+  }
+
+  .pill-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .btn-small{
+    padding:8px 12px;
+    font-size:14px;
+    box-shadow:0 2px 4px rgba(0,0,0,0.25);
+  }
+  .btn-diff-easy{background:#bbf7d0;}
+  .btn-diff-medium{background:#fef9c3;}
+  .btn-diff-hard{background:#fecaca;}
+  .btn-mode{background:#e5e7eb;}
+  .btn-choice-active{
+    box-shadow:0 0 0 2px rgba(251,191,36,0.9),0 4px 8px rgba(0,0,0,0.4);
+    transform:translateY(-1px);
+  }
+  .choice-hint{
+    color:#e5e7eb;
+    font-size:13px;
+    margin-top:2px;
+  }
+
+  .word-wrapper{
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .word-frame{
+    border-radius:26px;
+    padding:8px;
+    background:linear-gradient(135deg,#dc2626,#fb923c);
+    box-shadow:0 8px 18px rgba(0,0,0,0.4);
+  }
+  .word-card{
+    border-radius:22px;
+    padding:10px 14px;
+    background:var(--card);
+  }
+  .word-card-inner{
+    border-radius:18px;
+    padding:10px 12px;
+    background:var(--cardInner);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .word-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    color:#6b7280;
+    font-weight:500;
+  }
+  .word-text{
+    margin-top:4px;
+    font-size:22px;
+    font-weight:700;
+    text-align:center;
+    color:#0f172a;
+  }
+
+  .result-buttons{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .btn-success{
+    background:linear-gradient(135deg,#22c55e,#4ade80);
+    color:white;
+  }
+  .btn-danger{
+    background:linear-gradient(135deg,#ef4444,#fb7185);
+    color:white;
+  }
+  #btnStartTurn{
+    width:100%;
+    justify-content:center;
+  }
+  .small-text{
+    font-size:13px;
+    color:#e5e7eb;
+    text-align:center;
+  }
+  @media (max-width:600px){
+    .team-chip{flex:1 1 100%}
+    .word-text{font-size:20px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Aktivity</h1>
+
+  <!-- Nastavení týmů -->
+  <div id="setupScreen" class="screen">
+    <p class="setup-intro">
+      Zadej názvy týmů, přidej další pomocí <strong>+</strong> a pak spusť hru.
+    </p>
+    <div id="teamsContainer"></div>
+    <div class="setup-actions">
+      <button id="btnAddTeam" class="btn btn-secondary">＋ Přidat tým</button>
+      <button id="btnStartGame" class="btn btn-primary" disabled>Start hry ▶</button>
+    </div>
+  </div>
+
+  <!-- Herní obrazovka -->
+  <div id="gameScreen" class="screen hidden">
+    <div class="top-row">
+      <div class="timer-pill">
+        <span class="icon">⏱</span>
+        <input id="timerInput" class="timer-input" type="text" value="1:00" />
+      </div>
+      <div id="leaderDisplay" class="leader">Vede: –</div>
+    </div>
+
+    <div id="scoreboard" class="scoreboard"></div>
+
+    <div class="turn-info">
+      Na tahu: <span id="currentTeamName"></span>
+    </div>
+
+    <!-- OBRAZOVKA A – výběr -->
+    <div id="selectView">
+      <h3 style="color:#fefce8;margin:4px 0;">1️⃣ Vyber obtížnost</h3>
+      <div class="pill-row" id="diffButtons">
+        <button class="btn btn-small btn-diff-easy" data-diff="easy">Lehká (1 bod)</button>
+        <button class="btn btn-small btn-diff-medium" data-diff="medium">Střední (2 body)</button>
+        <button class="btn btn-small btn-diff-hard" data-diff="hard">Těžká (3 body)</button>
+      </div>
+
+      <h3 style="color:#fefce8;margin:4px 0;">2️⃣ Vyber typ úkolu</h3>
+      <div class="pill-row" id="modeButtons">
+        <button class="btn btn-small btn-mode" data-mode="draw">Kreslení</button>
+        <button class="btn btn-small btn-mode" data-mode="act">Pantomima</button>
+        <button class="btn btn-small btn-mode" data-mode="explain">Vysvětlování pojmu</button>
+      </div>
+
+      <p class="choice-hint" id="choiceHint">
+        Vyber obtížnost i typ úkolu – poté se ukáže pojem na samostatné obrazovce.
+      </p>
+    </div>
+
+    <!-- OBRAZOVKA B – pojem + START -->
+    <div id="turnView" class="hidden">
+      <div class="word-wrapper">
+        <div class="word-frame">
+          <div class="word-card">
+            <div class="word-card-inner">
+              <div class="word-header">
+                <span id="cardTeamName"></span>
+                <span id="cardDiffLabel"></span>
+              </div>
+              <div id="currentWord" class="word-text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="btnStartTurn" class="btn btn-primary">START ⏱</button>
+
+      <div id="resultButtons" class="result-buttons hidden">
+        <button id="btnGuessed" class="btn btn-success">Uhodli 🎉</button>
+        <button id="btnNotGuessed" class="btn btn-danger">Neuhodli</button>
+      </div>
+      <div id="infoText" class="small-text"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ----------- Pár ukázkových pojmů -----------
+  const WORDS = {
+    easy: {
+      draw:   ["Auto","Pes","Dům","Strom","Míč"],
+      act:    ["Běh","Skok","Plavání","Tancování","Telefonát"],
+      explain:["Rodina","Škola","Prázdniny","Pohádka","Supermarket"]
+    },
+    medium: {
+      draw:   ["Elektrárna","Mrakodrap","Vlak","Letadlo","Robot"],
+      act:    ["Kliky","Dřepy","Žehlení","Mytí nádobí","Kop míčem"],
+      explain:["Demokracie","Ekologie","Internet","Recyklace","Vakcinace"]
+    },
+    hard: {
+      draw:   ["Nostalgie","Paradox","Maska člověka","Uzavřený kruh","Bludiště"],
+      act:    ["Tichý spor","Horká hádka","Skrytý smích","Upřímné objetí","Nervózní chůze"],
+      explain:["Svědomí","Empatie","Zrada","Samota","Smysl života"]
+    }
+  };
+
+  const POINTS_FOR_DIFF = { easy:1, medium:2, hard:3 };
+  const DIFF_LABELS = {
+    easy:"Lehká – 1 bod",
+    medium:"Střední – 2 body",
+    hard:"Těžká – 3 body"
+  };
+  const MODE_LABELS = {
+    draw:"Kreslení",
+    act:"Pantomima",
+    explain:"Vysvětlování"
+  };
+
+  // ---------- Stav hry ----------
+  let teams = [];
+  let currentTeamIndex = 0;
+  let selectedDiff = null;
+  let selectedMode = null;
+  let timerId = null;
+  let timeLeft = 60;
+  let baseDuration = 60;   // <<< výchozí délka kola
+  let roundRunning = false;
+  let wordPrepared = false;
+
+  // Web Audio – delší pípnutí
+  let audioContext = null;
+  function playEndSound(){
+    try{
+      if(!audioContext){
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const now = audioContext.currentTime;
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(900, now);
+      osc.frequency.linearRampToValueAtTime(600, now + 0.5);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.linearRampToValueAtTime(0.01, now + 0.9);
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start(now);
+      osc.stop(now + 0.9);
+    }catch(e){}
+  }
+
+  // ---------- Elementy ----------
+  const setupScreen = document.getElementById("setupScreen");
+  const gameScreen  = document.getElementById("gameScreen");
+  const teamsContainer = document.getElementById("teamsContainer");
+  const btnAddTeam = document.getElementById("btnAddTeam");
+  const btnStartGame = document.getElementById("btnStartGame");
+
+  const scoreboardEl = document.getElementById("scoreboard");
+  const leaderDisplay = document.getElementById("leaderDisplay");
+  const currentTeamNameEl = document.getElementById("currentTeamName");
+
+  const diffButtonsWrap = document.getElementById("diffButtons");
+  const modeButtonsWrap = document.getElementById("modeButtons");
+  const choiceHint = document.getElementById("choiceHint");
+
+  const selectView = document.getElementById("selectView");
+  const turnView = document.getElementById("turnView");
+
+  const cardTeamName = document.getElementById("cardTeamName");
+  const cardDiffLabel = document.getElementById("cardDiffLabel");
+  const currentWordEl = document.getElementById("currentWord");
+  const timerInput = document.getElementById("timerInput");
+  const btnStartTurn = document.getElementById("btnStartTurn");
+  const resultButtons = document.getElementById("resultButtons");
+  const btnGuessed = document.getElementById("btnGuessed");
+  const btnNotGuessed = document.getElementById("btnNotGuessed");
+  const infoText = document.getElementById("infoText");
+
+  // ---------- Nastavení týmů ----------
+  function addTeamRow(initialName = ""){
+    const row = document.createElement("div");
+    row.className = "team-row";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Název týmu";
+    input.value = initialName;
+    input.addEventListener("input", validateStartButton);
+    row.appendChild(input);
+    teamsContainer.appendChild(row);
+  }
+
+  function getTeamNames(){
+    const inputs = teamsContainer.querySelectorAll("input");
+    const names = [];
+    inputs.forEach(i=>{
+      const n = i.value.trim();
+      if(n) names.push(n);
+    });
+    return names;
+  }
+
+  function validateStartButton(){
+    const names = getTeamNames();
+    btnStartGame.disabled = names.length < 2;
+  }
+
+  function startGame(){
+    const names = getTeamNames();
+    if(names.length < 2){
+      alert("Zadej alespoň dva týmy.");
+      return;
+    }
+    teams = names.map(n=>({name:n, score:0}));
+    currentTeamIndex = 0;
+    setupScreen.classList.add("hidden");
+    gameScreen.classList.remove("hidden");
+    updateScoreboard();
+    updateCurrentTeamLabel();
+    resetForNewTurn();
+  }
+
+  // ---------- Scoreboard ----------
+  function updateScoreboard(){
+    scoreboardEl.innerHTML = "";
+    let maxScore = -Infinity;
+    teams.forEach(t => { if(t.score > maxScore) maxScore = t.score; });
+    const leaders = teams.filter(t=>t.score === maxScore && maxScore>0);
+
+    teams.forEach((t,idx)=>{
+      const div = document.createElement("div");
+      div.className = "team-chip";
+      if(idx === currentTeamIndex) div.classList.add("current");
+      if(leaders.includes(t)) div.classList.add("leader-chip");
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "name";
+      nameSpan.textContent = t.name;
+      const scoreSpan = document.createElement("span");
+      scoreSpan.className = "score";
+      scoreSpan.textContent = t.score + " b";
+      div.appendChild(nameSpan);
+      div.appendChild(scoreSpan);
+      scoreboardEl.appendChild(div);
+    });
+
+    if(maxScore <= 0){
+      leaderDisplay.textContent = "Vede: –";
+    }else if(leaders.length === 1){
+      leaderDisplay.textContent = "Vede: " + leaders[0].name + " (" + maxScore + " b)";
+    }else{
+      leaderDisplay.textContent = "Remíza – " + leaders.map(t=>t.name).join(", ") +
+                                  " (" + maxScore + " b)";
+    }
+  }
+
+  function updateCurrentTeamLabel(){
+    currentTeamNameEl.textContent = teams[currentTeamIndex].name;
+  }
+
+  // ---------- Přepínání pohledů ----------
+  function showSelectView(){
+    selectView.classList.remove("hidden");
+    turnView.classList.add("hidden");
+  }
+  function showTurnView(){
+    selectView.classList.add("hidden");
+    turnView.classList.remove("hidden");
+  }
+
+  function resetForNewTurn(){
+    selectedDiff = null;
+    selectedMode = null;
+    wordPrepared = false;
+    roundRunning = false;
+    stopTimer();
+    timerInput.disabled = false;
+    // *tady* vracíme čas zpět na poslední nastavený limit
+    setTimerDisplay(baseDuration);
+    infoText.textContent = "";
+    resultButtons.classList.add("hidden");
+    btnStartTurn.classList.remove("hidden");
+    choiceHint.textContent = "Vyber obtížnost i typ úkolu – poté se ukáže pojem na samostatné obrazovce.";
+    [...diffButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.remove("btn-choice-active"));
+    [...modeButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.remove("btn-choice-active"));
+    showSelectView();
+  }
+
+  function pickWord(diff, mode){
+    const arr = WORDS[diff][mode];
+    if(!arr || arr.length === 0) return "DOPLŇ POJMY 🙂";
+    const idx = Math.floor(Math.random() * arr.length);
+    return arr[idx];
+  }
+
+  function prepareRound(){
+    const team = teams[currentTeamIndex];
+    const word = pickWord(selectedDiff, selectedMode);
+    cardTeamName.textContent = team.name;
+    cardDiffLabel.textContent = DIFF_LABELS[selectedDiff] + " · " + MODE_LABELS[selectedMode];
+    currentWordEl.textContent = word;
+    resultButtons.classList.add("hidden");
+    btnStartTurn.classList.remove("hidden");
+    infoText.textContent = "Připravte se – až stisknete START, začne odpočítávání.";
+    timerInput.disabled = false;
+    wordPrepared = true;
+    roundRunning = false;
+    stopTimer();
+    showTurnView();
+  }
+
+  function handleResult(guessed){
+    if(!wordPrepared) return;
+    stopTimer();
+    roundRunning = false;
+    timerInput.disabled = false;
+
+    const team = teams[currentTeamIndex];
+    const pts = POINTS_FOR_DIFF[selectedDiff];
+    if(guessed){
+      team.score += pts;
+      infoText.textContent = team.name + " uhodli pojem a získávají " + pts + " bod(y)!";
+    }else{
+      infoText.textContent = team.name + " tentokrát body nezískávají.";
+    }
+    updateScoreboard();
+
+    setTimeout(()=>{
+      currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+      updateCurrentTeamLabel();
+      resetForNewTurn();
+    }, 1200);
+  }
+
+  // ---------- Timer ----------
+  function parseTimerValue(str){
+    str = String(str || "").trim();
+    if(!str) return 60;
+    if(str.includes(":")){
+      const [mPart,sPart] = str.split(":");
+      const m = parseInt(mPart,10);
+      const s = parseInt(sPart,10);
+      if(isNaN(m) || isNaN(s)) return 60;
+      return Math.max(1, m*60 + s);
+    }else{
+      const sec = parseInt(str,10);
+      if(isNaN(sec) || sec<=0) return 60;
+      return sec;
+    }
+  }
+
+  function formatTime(sec){
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec/60);
+    const s = sec%60;
+    return m + ":" + (s<10?"0"+s:s);
+  }
+
+  function setTimerDisplay(sec){
+    timerInput.value = formatTime(sec);
+  }
+
+  function startTimerFromInput(){
+    // uložíme výchozí délku kola podle toho, co je napsáno
+    baseDuration = parseTimerValue(timerInput.value);
+    timeLeft = baseDuration;
+    setTimerDisplay(timeLeft);
+    timerInput.disabled = true;
+    startTimer();
+  }
+
+  function startTimer(){
+    stopTimer();
+    roundRunning = true;
+    if(!audioContext){
+      try{
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }catch(e){
+        audioContext = null;
+      }
+    }
+    timerId = setInterval(()=>{
+      timeLeft--;
+      if(timeLeft <= 0){
+        timeLeft = 0;
+        setTimerDisplay(timeLeft);
+        stopTimer();
+        roundRunning = false;
+        playEndSound();
+        infoText.textContent = "Čas vypršel! Rozhodněte, jestli uhodli nebo ne.";
+        timerInput.disabled = false;
+      }else{
+        setTimerDisplay(timeLeft);
+      }
+    },1000);
+  }
+
+  function stopTimer(){
+    if(timerId){
+      clearInterval(timerId);
+      timerId = null;
+    }
+  }
+
+  // ---------- Handlery ----------
+  btnAddTeam.addEventListener("click", ()=>addTeamRow(""));
+  btnStartGame.addEventListener("click", startGame);
+
+  diffButtonsWrap.addEventListener("click", e=>{
+    if(!(e.target instanceof HTMLButtonElement)) return;
+    selectedDiff = e.target.dataset.diff;
+    [...diffButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.toggle("btn-choice-active", btn===e.target));
+    if(selectedDiff && selectedMode && !wordPrepared) prepareRound();
+  });
+
+  modeButtonsWrap.addEventListener("click", e=>{
+    if(!(e.target instanceof HTMLButtonElement)) return;
+    selectedMode = e.target.dataset.mode;
+    [...modeButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.toggle("btn-choice-active", btn===e.target));
+    if(selectedDiff && selectedMode && !wordPrepared) prepareRound();
+  });
+
+  btnStartTurn.addEventListener("click", ()=>{
+    if(roundRunning) return;
+    startTimerFromInput();
+    wordPrepared = true;
+    roundRunning = true;
+    btnStartTurn.classList.add("hidden");
+    resultButtons.classList.remove("hidden");
+    infoText.textContent = "Hrajte! Čas běží.";
+  });
+
+  btnGuessed.addEventListener("click", ()=>handleResult(true));
+  btnNotGuessed.addEventListener("click", ()=>handleResult(false));
+
+  // ---------- Inicializace ----------
+  addTeamRow("Tým 1");
+  addTeamRow("Tým 2");
+  validateStartButton();
+  baseDuration = 60;
+  setTimerDisplay(baseDuration);
+</script>
+</body>
+</html>
