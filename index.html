@@ -377,22 +377,108 @@
 <script>
   // ----------- Pár ukázkových pojmů -----------
   const WORDS = {
-    easy: {
-      draw:   ["Auto","Pes","Dům","Strom","Míč"],
-      act:    ["Běh","Skok","Plavání","Tancování","Telefonát"],
-      explain:["Rodina","Škola","Prázdniny","Pohádka","Supermarket"]
-    },
-    medium: {
-      draw:   ["Elektrárna","Mrakodrap","Vlak","Letadlo","Robot"],
-      act:    ["Kliky","Dřepy","Žehlení","Mytí nádobí","Kop míčem"],
-      explain:["Demokracie","Ekologie","Internet","Recyklace","Vakcinace"]
-    },
-    hard: {
-      draw:   ["Nostalgie","Paradox","Maska člověka","Uzavřený kruh","Bludiště"],
-      act:    ["Tichý spor","Horká hádka","Skrytý smích","Upřímné objetí","Nervózní chůze"],
-      explain:["Svědomí","Empatie","Zrada","Samota","Smysl života"]
-    }
-  };
+  easy: {
+    draw: [
+      "Auto","Pes","Dům","Strom","Míč","Kočka","Slunce","Květina","Kolo","Loď",
+      "Hora","Řeka","Most","Škola","Telefon","Počítač","Stůl","Židle","Kniha","Pero",
+      "Okno","Dveře","Postel","Hrnek","Talíř","Lžíce","Vidlička","Nůž","Taška","Batoh",
+      "Deštník","Čepice","Bota","Kabát","Tričko","Kalhoty","Hodiny","Kalendář","Mapa","Vlajka",
+      "Město","Vesnice","Zahrada","Plot","Košík","Jablko","Hruška","Banán","Pomeranč","Mrkev",
+      "Brambora","Chléb","Rohlík","Sýr","Mléko","Voda","Džus","Zmrzlina","Dort","Svíčka",
+      "Balon","Krabice","Kostka","Kruh","Čára","Bod","Autojeřáb","Semafor","Silnice","Přechod",
+      "Letadlo","Vlak","Autobus","Motorka","Traktor","Kolohrad","Hřiště","Houpačka","Skluzavka","Písek",
+      "Květ","List","Tráva","Mrak","Déšť","Sníh","Led","Vítr","Blesk","Duha"
+    ],
+    act: [
+      "Běh","Skok","Chůze","Plavání","Tancování","Smích","Pláč","Jídlo","Pití","Spaní",
+      "Čtení","Psaní","Kreslení","Malování","Zívání","Protahování","Sezení","Stání","Lezení","Skákání",
+      "Tleskání","Mávaní","Volání","Mluvení","Šeptání","Kýchání","Kašlání","Dýchání","Zívnutí","Usínání",
+      "Buzení","Mytí","Česání","Oblékání","Svlékání","Vaření","Pečení","Krájení","Míchání","Ochutnávání",
+      "Balení","Nesení","Tlačení","Tahání","Házení","Chytání","Kopání","Jízda","Brzdění","Zrychlení",
+      "Zastavení","Otevírání","Zavírání","Zapínání","Vypínání","Kliknutí","Psaníčko","Voláníčko","Úsměv","Mračení",
+      "Ukazování","Počítání","Sčítání","Odčítání","Násobení","Dělení","Zpěv","Poslech","Hraní","Cvičení",
+      "Běhání","Skákáníčko","Ležení","Sedění","Stáníčko","Pozorování","Koukání","Dívání","Hledání","Nacházení",
+      "Uklízení","Zametání","Utírání","Leštění","Zalévání","Sázení","Trhání","Sbírání","Vynášení","Vracejí"
+    ],
+    explain: [
+      "Rodina","Škola","Domov","Přátelství","Láska","Hra","Práce","Odpočinek","Spánek","Jídlo",
+      "Pití","Zábava","Sport","Hudba","Film","Kniha","Pohádka","Příběh","Cesta","Výlet",
+      "Dovolená","Prázdniny","Učení","Zkouška","Známka","Úkol","Pomoc","Radost","Smutek","Strach",
+      "Vztek","Úsměv","Slza","Dar","Překvapení","Narozeniny","Svátek","Vánoce","Velikonoce","Oslava",
+      "Nákup","Obchod","Supermarket","Peníze","Cena","Platba","Úspory","Kapesné","Kredit","Dluh",
+      "Počasí","Teplo","Zima","Déšť","Sníh","Vítr","Bouře","Slunce","Mraky","Jaro",
+      "Léto","Podzim","Zima","Ráno","Poledne","Večer","Noc","Týden","Víkend","Den",
+      "Rok","Čas","Hodina","Minuta","Sekunda","Plán","Cíl","Úspěch","Chyba","Poučení"
+    ]
+  },
+
+  medium: {
+    draw: [
+      "Elektrárna","Mrakodrap","Letiště","Přístav","Robot","Laboratoř","Továrna","Muzeum","Katedrála","Hrad",
+      "Zámek","Stadion","Tunel","Mostovka","Silnice","Dálnice","Křižovatka","Kolejiště","Lokomotiva","Vagón",
+      "Družice","Rakoplán","Astronaut","Planeta","Galaxie","Kometa","Asteroid","Observatoř","Dalekohled","Mikroskop",
+      "Vulkan","Krater","Ledovec","Poušť","Oáza","Džungle","Savanna","Prales","Útes","Laguna",
+      "Korál","Ponorka","Maják","Pobřeží","Poloostrov","Ostrov","Souostroví","Mapa","Atlas","Kompas",
+      "Radar","Sonar","Anténa","Vysílač","Server","Datacentrum","Procesor","Čip","Obvod","Baterie",
+      "Transformátor","Generátor","Turbína","Ventilátor","Motor","Píst","Převodovka","Brzda","Spojka","Kolozubaté",
+      "Jeřáb","Výtah","Eskalátor","Semafor","Kamera","Projektor","Plátno","Reproduktor","Sluchátka","Mikrofon",
+      "Klávesnice","Myš","Monitor","Tablet","Mobil","Notebook","Router","Modem","Kabel","Zásuvka"
+    ],
+    act: [
+      "Analyzování","Pozorování","Porovnávání","Vyhodnocování","Rozhodování","Plánování","Organizování","Koordinování","Řízení","Programování",
+      "Kódování","Ladění","Testování","Optimalizace","Modelování","Simulování","Měření","Výpočty","Odhadování","Predikce",
+      "Vyjednávání","Argumentace","Diskutování","Prezentování","Vysvětlování","Interpretace","Shrnutí","Závěr","Dokazování","Odvozování",
+      "Navrhování","Konstrukce","Montování","Demontování","Sestavování","Oprava","Údržba","Servisování","Diagnostika","Kalibrace",
+      "Experimentování","Pozorování","Zaznamenávání","Vyhodnocení","Publikování","Archivace","Třídění","Kategorizace","Indexování","Vyhledávání",
+      "Zabezpečení","Šifrování","Dekódování","Autentizace","Autorizace","Zálohování","Obnova","Migrace","Synchronizace","Aktualizace",
+      "Školení","Vzdělávání","Studování","Učení","Zapamatování","Procvičování","Opakování","Zkoušení","Hodnocení","Sebehodnocení",
+      "Spolupráce","Kooperace","Koalice","Moderování","Facilitace","Mediace","Konzultace","Poradenství","Mentoring","Koučování"
+    ],
+    explain: [
+      "Demokracie","Republika","Monarchie","Ekologie","Biologie","Chemie","Fyzika","Astronomie","Geografie","Historie",
+      "Ekonomie","Inflace","Deflace","Trh","Nabídka","Poptávka","Konkurence","Monopol","Globalizace","Migrace",
+      "Urbanizace","Industrializace","Digitalizace","Automatizace","Robotizace","Internet","Algoritmus","Databáze","Síť","Protokol",
+      "Bezpečnost","Soukromí","Identita","Etika","Morálka","Právo","Zákon","Ústava","Soud","Spravedlnost",
+      "Svoboda","Rovnost","Solidarita","Odpovědnost","Tolerance","Diskriminace","Inkluze","Diverzita","Empatie","Komunikace",
+      "Motivace","Inspirace","Kreativita","Inovace","Strategie","Taktika","Cíl","Vize","Mise","Plánování",
+      "Riziko","Krize","Stabilita","Růst","Pokrok","Udržitelnost","Recyklace","Energie","Zdroje","Spotřeba",
+      "Zdraví","Nemoc","Prevence","Léčba","Vakcína","Imunita","Pandemie","Epidemie","Diagnóza","Terapie"
+    ]
+  },
+
+  hard: {
+    draw: [
+      "Paradox","Nekonečno","Iluzionismus","Labyrint","Metamorfóza","Dualita","Entropie","Singularita","Symetrie","Asymetrie",
+      "Fraktál","Hyperkrychle","Möbius","Kleinova","Topologie","Dimenze","Multivesmír","Časoprostor","Relativita","Kvantování",
+      "Superpozice","Provázanost","Kolaps","Determinismus","Chaos","Emergence","Komplexita","Abstrakce","Symbolismus","Minimalismus",
+      "Surrealismus","Kubismus","Impresionismus","Expresionismus","Futurismus","Konstruktivismus","Dekonstrukce","Palimpsest","Metanarativ","Intertextualita",
+      "Simulakrum","Hyperrealita","Transcendence","Imanence","Dialektika","Fenomenologie","Hermeneutika","Ontologie","Epistemologie","Axiologie",
+      "Eschatologie","Teleologie","Metafyzika","Kosmologie","Antinomie","Apofáze","Katabáze","Anabáze","Anamnéze","Letargie",
+      "Nostalgie","Melancholie","Ambivalence","Disonance","Kontradikce","Ironie","Parodie","Satira","Groteska","Allegorie",
+      "Metonymie","Synekdocha","Oxymóron","Hyperbola","Litotes","Anacoluthon","Palindrom","Anagram","Rekurze","Iterace"
+    ],
+    act: [
+      "Meditování","Kontemplace","Sebereflexe","Introspekce","Transcendování","Dezinterpretace","Reinterpretace","Dekonstrukce","Syntetizace","Abstrahování",
+      "Generalizace","Specifikace","Formalizace","Axiomatizace","Modelování","Simulace","Idealizace","Approximation","Limitování","Interpolace",
+      "Extrapolace","Optimalizování","Minimalizace","Maximalizace","Stochastika","Randomizace","Determinace","Korelací","Regrese","Predikování",
+      "Validace","Verifikace","Falzifikace","Argumentování","Protiargumentace","Polemování","Diskurz","Narrativizace","Kontextualizace","Dezkontextualizace",
+      "Symbolizace","Signifikace","Denotace","Konotace","Kodifikace","Dekodifikace","Normalizace","Standardizace","Hierarchizace","Strukturalizace",
+      "Segmentace","Agregace","Disagregace","Klasifikace","Typologizace","Taxonomie","Systematizace","Metodologie","Operationalizace","Implementace",
+      "Evaluace","Revize","Refaktoring","Iterování","Rekurzování","Paralelizace","Synchronizace","Asynchronizace","Optimalizování","Balancování",
+      "Moderování","Facilitování","Mediování","Arbitrování","Vyvažování","Strategizování","Taktizování","Anticipace","Adaptování","Transformování"
+    ],
+    explain: [
+      "Svědomí","Existence","Identita","Subjektivita","Objektivita","Smysl","Bytí","Nicota","Vědomí","Nevědomí",
+      "Svoboda","Nutnost","Determinismus","Kauzalita","Náhoda","Pravda","Lež","Poznání","Víra","Skepticismus",
+      "Racionalismus","Empirismus","Idealismus","Materialismus","Realismus","Relativismus","Absolutno","Transcendence","Imanence","Dualismus",
+      "Monismus","Pluralismus","Paradigma","Diskurz","Narrativ","Interpretace","Hermeneutika","Fenomen","Esence","Existencialismus",
+      "Autenticita","Odvaha","Odpovědnost","Úzkost","Samota","Odvaha","Zrada","Vina","Odpouštění","Smíření",
+      "Spravedlnost","Moc","Autorita","Legitimita","Manipulace","Propaganda","Ideologie","Dogma","Hereze","Fanatismus",
+      "Civilizace","Kultura","Tradice","Paměť","Historie","Pokrok","Úpadek","Krize","Transformace","Revoluce",
+      "Utopie","Dystopie","Apokalypsa","Eschaton","Spása","Naděje","Beznaděj","Víra","Smrt","Nesmrtelnost"
+    ]
+  }
+};
 
   const POINTS_FOR_DIFF = { easy:1, medium:2, hard:3 };
   const DIFF_LABELS = {
