@@ -3,61 +3,94 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Aktivity – párty hra</title>
+<title>Aktivity</title>
 <style>
   :root{
-    --bg1:#0d6b1c;
-    --bg2:#0a4f15;
-    --card:#f9fafb;
-    --cardInner:#e5f7c8;
-    --text:#0f172a;
+    --bg:#eef7f0;
+    --bg2:#dff1e4;
+    --panel:#ffffff;
+    --ink:#111827;
     --muted:#6b7280;
-    --pill:#111827;
+    --line:#d8e3dc;
+    --accent:#16a34a;
+    --accent-dark:#15803d;
+    --danger:#dc2626;
+    --shadow:0 18px 45px rgba(15,23,42,0.14);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;height:100%}
+  html,body{margin:0;min-height:100%}
   body{
     font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:radial-gradient(circle at 20% 0%,#27c254 0,var(--bg1) 40%,var(--bg2) 100%);
-    color:#0f172a;
+    background:linear-gradient(160deg,var(--bg),var(--bg2));
+    color:var(--ink);
     display:flex;
     justify-content:center;
-    align-items:stretch;
   }
   .app{
     width:100%;
-    max-width:900px;
-    margin:auto;
-    padding:16px;
+    max-width:760px;
+    min-height:100vh;
+    padding:18px;
     display:flex;
     flex-direction:column;
-    gap:16px;
+    gap:14px;
   }
   h1{
-    margin:0 0 8px;
+    margin:2px 0 0;
     text-align:center;
-    color:#ffffff;
-    text-shadow:0 2px 6px rgba(0,0,0,0.5);
-    letter-spacing:0.03em;
+    font-size:clamp(30px,6vw,44px);
+    line-height:1;
+    letter-spacing:0;
   }
   .screen{
-    background:rgba(15,23,42,0.1);
-    border-radius:24px;
+    background:var(--panel);
+    border:1px solid rgba(216,227,220,0.9);
+    border-radius:18px;
     padding:16px;
-    backdrop-filter:blur(8px);
+    box-shadow:var(--shadow);
   }
-  .hidden{display:none}
-
-  .setup-intro{
-    color:#e5e7eb;
-    text-align:center;
-    margin-bottom:12px;
+  .hidden{display:none!important}
+  .section-title{
+    margin:0 0 10px;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
   }
   #teamsContainer{
     display:flex;
     flex-direction:column;
     gap:8px;
+  }
+  .game-type-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
     margin-bottom:12px;
+  }
+  .btn-type{
+    min-height:74px;
+    flex-direction:column;
+    background:#f8fafc;
+    border:1px solid var(--line);
+    text-align:center;
+  }
+  .btn-type span{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:700;
+  }
+  .game-help{
+    min-height:44px;
+    padding:11px 12px;
+    margin:0 0 16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#f8fafc;
+    color:var(--muted);
+    font-size:14px;
+    font-weight:700;
   }
   .team-row{
     display:flex;
@@ -65,232 +98,302 @@
   }
   .team-row input{
     flex:1;
-    padding:10px 12px;
-    border-radius:999px;
-    border:none;
-    font-size:15px;
+    min-width:0;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#f9fafb;
+    font-size:16px;
     outline:none;
   }
-  .team-row input::placeholder{color:#9ca3af}
+  .team-row input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(22,163,74,0.14);
+  }
+  .btn-remove-team{
+    width:46px;
+    flex:0 0 46px;
+    padding:0;
+    font-size:20px;
+    background:#fee2e2;
+    color:#991b1b;
+  }
   .btn{
-    border:none;
-    border-radius:999px;
-    padding:10px 16px;
+    border:0;
+    border-radius:12px;
+    padding:11px 15px;
     font-size:15px;
-    font-weight:600;
+    font-weight:800;
     cursor:pointer;
-    background:#f9fafb;
-    color:#0f172a;
-    box-shadow:0 3px 6px rgba(0,0,0,0.25);
+    background:#f3f4f6;
+    color:var(--ink);
     display:inline-flex;
     align-items:center;
     justify-content:center;
     gap:6px;
-    transition:transform 0.1s,box-shadow 0.1s;
+    transition:transform 0.12s,box-shadow 0.12s,background 0.12s;
   }
-  .btn:active{
-    transform:translateY(1px);
-    box-shadow:0 1px 3px rgba(0,0,0,0.25);
-  }
+  .btn:active{transform:translateY(1px)}
   .btn-primary{
-    background:linear-gradient(135deg,#f97316,#fb923c);
+    background:var(--accent);
     color:white;
+    box-shadow:0 8px 18px rgba(22,163,74,0.24);
   }
+  .btn-primary:active{background:var(--accent-dark)}
   .btn-secondary{
-    background:rgba(15,23,42,0.85);
-    color:#e5e7eb;
+    background:#eef2f7;
   }
   .btn:disabled{
-    opacity:0.4;
+    opacity:0.45;
     cursor:default;
     transform:none;
     box-shadow:none;
   }
   .setup-actions{
-    display:flex;
+    display:grid;
+    grid-template-columns:1fr 1fr;
     gap:10px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-top:8px;
+    margin-top:12px;
   }
-
   .top-row{
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
-    gap:8px;
-    margin-bottom:8px;
+    gap:10px;
+    margin-bottom:16px;
   }
   .timer-pill{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:6px;
-    background:var(--pill);
-    color:#f9fafb;
-    padding:6px 14px;
+    background:#111827;
+    color:#fff;
+    padding:6px 12px;
     border-radius:999px;
     font-variant-numeric:tabular-nums;
-    box-shadow:0 4px 10px rgba(0,0,0,0.45);
-  }
-  .timer-pill span.icon{
-    font-size:16px;
   }
   .timer-input{
-    border:none;
+    width:4em;
+    border:0;
     background:transparent;
-    color:#f9fafb;
-    width:3.9em;
+    color:inherit;
     text-align:center;
     font-size:20px;
-    font-weight:700;
-    font-variant-numeric:tabular-nums;
+    font-weight:900;
     outline:none;
   }
-  .timer-input:disabled{
-    opacity:0.7;
-  }
-  .leader{
-    color:#fefce8;
-    font-weight:500;
-    text-shadow:0 2px 4px rgba(0,0,0,0.6);
-    text-align:right;
-    font-size:14px;
-  }
-
-  .scoreboard{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-    margin-bottom:10px;
-  }
-  .team-chip{
-    flex:1 1 calc(50% - 6px);
-    min-width:0;
-    background:rgba(15,23,42,0.85);
-    color:#e5e7eb;
-    border-radius:999px;
-    padding:6px 10px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:6px;
-    font-size:13px;
-  }
-  .team-chip span.name{
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .team-chip span.score{
-    font-variant-numeric:tabular-nums;
-    font-weight:600;
-  }
-  .team-chip.current{
-    border:2px solid #fbbf24;
-  }
-  .team-chip.leader-chip{
-    box-shadow:0 0 0 2px rgba(34,197,94,0.7);
-  }
-
   .turn-info{
-    color:#fefce8;
-    margin-bottom:6px;
-    font-weight:500;
+    margin:0 0 16px;
+    text-align:center;
+    font-size:24px;
+    font-weight:900;
   }
-
-  .pill-row{
-    display:flex;
-    flex-wrap:wrap;
+  .mode-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+  }
+  .limit-panel{
+    margin:0 0 12px;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#f8fafc;
+  }
+  .limit-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:8px;
-    margin-bottom:8px;
   }
-  .btn-small{
-    padding:8px 12px;
-    font-size:14px;
-    box-shadow:0 2px 4px rgba(0,0,0,0.25);
+  .limit-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
   }
-  .btn-diff-easy{background:#bbf7d0;}
-  .btn-diff-medium{background:#fef9c3;}
-  .btn-diff-hard{background:#fecaca;}
-  .btn-mode{background:#e5e7eb;}
+  .limit-field input{
+    width:100%;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+    color:var(--ink);
+    font-size:18px;
+    font-weight:900;
+    text-align:center;
+  }
+  .word-entry-title{
+    margin:0 0 14px;
+    text-align:center;
+    font-size:24px;
+    font-weight:950;
+  }
+  .entry-field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin-bottom:12px;
+  }
+  .entry-label{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .entry-count{
+    color:var(--accent-dark);
+    font-variant-numeric:tabular-nums;
+  }
+  .entry-field textarea{
+    width:100%;
+    min-height:86px;
+    resize:vertical;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#f9fafb;
+    color:var(--ink);
+    font:inherit;
+    outline:none;
+  }
+  .entry-field textarea:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(22,163,74,0.14);
+  }
+  .custom-game-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin:12px 0;
+  }
+  .word-entry-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-top:12px;
+  }
+  .btn-mode{
+    min-height:92px;
+    padding:14px 10px;
+    flex-direction:column;
+    background:#f8fafc;
+    border:1px solid var(--line);
+    font-size:16px;
+  }
+  .btn-mode span{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:700;
+  }
   .btn-choice-active{
-    box-shadow:0 0 0 2px rgba(251,191,36,0.9),0 4px 8px rgba(0,0,0,0.4);
-    transform:translateY(-1px);
+    background:#dcfce7;
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(22,163,74,0.16);
   }
   .choice-hint{
-    color:#e5e7eb;
+    color:var(--muted);
     font-size:13px;
-    margin-top:2px;
+    margin:10px 0 0;
   }
-
   .word-wrapper{
-    margin-top:10px;
     display:flex;
     flex-direction:column;
-    gap:10px;
-  }
-  .word-frame{
-    border-radius:26px;
-    padding:8px;
-    background:linear-gradient(135deg,#dc2626,#fb923c);
-    box-shadow:0 8px 18px rgba(0,0,0,0.4);
+    gap:12px;
   }
   .word-card{
-    border-radius:22px;
-    padding:10px 14px;
-    background:var(--card);
-  }
-  .word-card-inner{
+    border:1px solid var(--line);
     border-radius:18px;
-    padding:10px 12px;
-    background:var(--cardInner);
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-  }
-  .word-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:12px;
-    color:#6b7280;
-    font-weight:500;
+    padding:22px 18px;
+    background:linear-gradient(180deg,#ffffff,#f8fafc);
   }
   .word-text{
-    margin-top:4px;
-    font-size:22px;
-    font-weight:700;
-    text-align:center;
-    color:#0f172a;
-  }
-
-  .result-buttons{
+    min-height:150px;
     display:flex;
-    gap:10px;
+    align-items:center;
     justify-content:center;
-    flex-wrap:wrap;
-  }
-  .btn-success{
-    background:linear-gradient(135deg,#22c55e,#4ade80);
-    color:white;
-  }
-  .btn-danger{
-    background:linear-gradient(135deg,#ef4444,#fb7185);
-    color:white;
+    text-align:center;
+    font-size:clamp(30px,8vw,54px);
+    line-height:1.05;
+    font-weight:950;
+    overflow-wrap:anywhere;
   }
   #btnStartTurn{
     width:100%;
-    justify-content:center;
+    margin-top:12px;
+  }
+  .result-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+  }
+  .btn-success{
+    background:var(--accent);
+    color:white;
+  }
+  .btn-danger{
+    background:#fee2e2;
+    color:#991b1b;
   }
   .small-text{
-    font-size:13px;
-    color:#e5e7eb;
+    min-height:20px;
+    margin-top:10px;
+    color:var(--muted);
     text-align:center;
+    font-size:14px;
+    font-weight:700;
   }
-  @media (max-width:600px){
-    .team-chip{flex:1 1 100%}
-    .word-text{font-size:20px}
+  .results-table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 8px;
+    margin:4px 0 14px;
+  }
+  .results-table th{
+    color:var(--muted);
+    font-size:12px;
+    text-align:left;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    padding:0 10px;
+  }
+  .results-table td{
+    background:#f8fafc;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:12px 10px;
+    font-weight:800;
+  }
+  .results-table td:first-child{
+    border-left:1px solid var(--line);
+    border-radius:12px 0 0 12px;
+  }
+  .results-table td:last-child{
+    border-right:1px solid var(--line);
+    border-radius:0 12px 12px 0;
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+  }
+  .results-table tr.next td{
+    background:#f0fdf4;
+    border-color:rgba(22,163,74,0.45);
+  }
+  #btnContinueRound{
+    width:100%;
+  }
+  @media (max-width:620px){
+    .app{padding:12px}
+    .screen{padding:14px;border-radius:16px}
+    .setup-actions,.mode-grid,.result-buttons,.game-type-grid,.custom-game-grid{grid-template-columns:1fr}
+    .limit-grid{grid-template-columns:1fr 1fr 1fr}
+    .btn-mode{min-height:70px}
+    .word-text{min-height:130px}
   }
 </style>
 </head>
@@ -298,212 +401,1072 @@
 <div class="app">
   <h1>Aktivity</h1>
 
-  <!-- Nastavení týmů -->
   <div id="setupScreen" class="screen">
-    <p class="setup-intro">
-      Zadej názvy týmů, přidej další pomocí <strong>+</strong> a pak spusť hru.
-    </p>
+    <p class="section-title">Typ hry</p>
+    <div class="game-type-grid" id="gameTypeButtons">
+      <button class="btn btn-type" data-game-type="classic">Klasika<span>1 pojem za tah</span></button>
+      <button class="btn btn-type" data-game-type="timed">Na čas<span>víc pojmů v tahu</span></button>
+      <button class="btn btn-type" data-game-type="mixed">Mix limitů<span>čas + počty kategorií</span></button>
+      <button class="btn btn-type" data-game-type="custom">Vlastní pojmy<span>týmy napíšou slova</span></button>
+    </div>
+    <p id="gameTypeHelp" class="game-help">Vyber typ hry.</p>
+
+    <p class="section-title">Týmy</p>
     <div id="teamsContainer"></div>
     <div class="setup-actions">
-      <button id="btnAddTeam" class="btn btn-secondary">＋ Přidat tým</button>
-      <button id="btnStartGame" class="btn btn-primary" disabled>Start hry ▶</button>
+      <button id="btnAddTeam" class="btn btn-secondary">Přidat tým</button>
+      <button id="btnStartGame" class="btn btn-primary" disabled>Start hry</button>
     </div>
   </div>
 
-  <!-- Herní obrazovka -->
+  <div id="wordSetupScreen" class="screen hidden">
+    <p class="section-title">Vlastní pojmy</p>
+    <h2 id="wordSetupTeamName" class="word-entry-title"></h2>
+
+    <label class="entry-field">
+      <span class="entry-label">Kreslení <span id="customDrawCount" class="entry-count">0</span></span>
+      <textarea id="customDrawInput" placeholder="strom, auto, hrad"></textarea>
+    </label>
+
+    <label class="entry-field">
+      <span class="entry-label">Pantomima <span id="customActCount" class="entry-count">0</span></span>
+      <textarea id="customActInput" placeholder="kuchař, zedník, brusle"></textarea>
+    </label>
+
+    <label class="entry-field">
+      <span class="entry-label">Vysvětlování <span id="customExplainCount" class="entry-count">0</span></span>
+      <textarea id="customExplainInput" placeholder="dovolená, tajemství, reklamace"></textarea>
+    </label>
+
+    <div id="customGameChoice" class="hidden">
+      <p class="section-title">Jak budete hrát?</p>
+      <div class="custom-game-grid" id="customGameTypeButtons">
+        <button class="btn btn-type" data-game-type="classic">Klasika<span>1 pojem za tah</span></button>
+        <button class="btn btn-type" data-game-type="timed">Na čas<span>víc pojmů v tahu</span></button>
+        <button class="btn btn-type" data-game-type="mixed">Mix limitů<span>čas + limit jedné kategorie</span></button>
+      </div>
+    </div>
+
+    <div class="word-entry-actions">
+      <button id="btnNextWordTeam" class="btn btn-primary">Další tým</button>
+    </div>
+  </div>
+
   <div id="gameScreen" class="screen hidden">
     <div class="top-row">
       <div class="timer-pill">
-        <span class="icon">⏱</span>
         <input id="timerInput" class="timer-input" type="text" value="1:00" />
       </div>
-      <div id="leaderDisplay" class="leader">Vede: –</div>
     </div>
 
-    <div id="scoreboard" class="scoreboard"></div>
-
-    <div class="turn-info">
-      Na tahu: <span id="currentTeamName"></span>
-    </div>
-
-    <!-- OBRAZOVKA A – výběr -->
     <div id="selectView">
-      <h3 style="color:#fefce8;margin:4px 0;">1️⃣ Vyber obtížnost</h3>
-      <div class="pill-row" id="diffButtons">
-        <button class="btn btn-small btn-diff-easy" data-diff="easy">Lehká (1 bod)</button>
-        <button class="btn btn-small btn-diff-medium" data-diff="medium">Střední (2 body)</button>
-        <button class="btn btn-small btn-diff-hard" data-diff="hard">Těžká (3 body)</button>
+      <p class="turn-info">Na tahu: <span id="currentTeamName"></span></p>
+      <div id="limitPanel" class="limit-panel hidden">
+        <p class="section-title">Maximum v tahu</p>
+        <div class="limit-grid">
+          <label class="limit-field">Kreslení
+            <input id="drawLimitInput" type="number" min="0" max="20" value="2" />
+          </label>
+          <label class="limit-field">Pantomima
+            <input id="actLimitInput" type="number" min="0" max="20" value="2" />
+          </label>
+          <label class="limit-field">Pojmy
+            <input id="explainLimitInput" type="number" min="0" max="20" value="4" />
+          </label>
+        </div>
       </div>
-
-      <h3 style="color:#fefce8;margin:4px 0;">2️⃣ Vyber typ úkolu</h3>
-      <div class="pill-row" id="modeButtons">
-        <button class="btn btn-small btn-mode" data-mode="draw">Kreslení</button>
-        <button class="btn btn-small btn-mode" data-mode="act">Pantomima</button>
-        <button class="btn btn-small btn-mode" data-mode="explain">Vysvětlování pojmu</button>
+      <div class="mode-grid" id="modeButtons">
+        <button class="btn btn-mode" data-mode="draw">Kreslení<span id="drawModeHint">kresli bez mluvení</span></button>
+        <button class="btn btn-mode" data-mode="act">Pantomima<span id="actModeHint">předváděj beze slov</span></button>
+        <button class="btn btn-mode" data-mode="explain">Vysvětlování<span id="explainModeHint">popisuj bez kořene slova</span></button>
       </div>
-
-      <p class="choice-hint" id="choiceHint">
-        Vyber obtížnost i typ úkolu – poté se ukáže pojem na samostatné obrazovce.
-      </p>
     </div>
 
-    <!-- OBRAZOVKA B – pojem + START -->
     <div id="turnView" class="hidden">
       <div class="word-wrapper">
-        <div class="word-frame">
-          <div class="word-card">
-            <div class="word-card-inner">
-              <div class="word-header">
-                <span id="cardTeamName"></span>
-                <span id="cardDiffLabel"></span>
-              </div>
-              <div id="currentWord" class="word-text"></div>
-            </div>
-          </div>
+        <div class="word-card">
+          <div id="currentWord" class="word-text"></div>
         </div>
       </div>
 
-      <button id="btnStartTurn" class="btn btn-primary">START ⏱</button>
+      <button id="btnStartTurn" class="btn btn-primary">Start</button>
 
       <div id="resultButtons" class="result-buttons hidden">
-        <button id="btnGuessed" class="btn btn-success">Uhodli 🎉</button>
+        <button id="btnGuessed" class="btn btn-success">Uhodli</button>
         <button id="btnNotGuessed" class="btn btn-danger">Neuhodli</button>
       </div>
       <div id="infoText" class="small-text"></div>
+    </div>
+
+    <div id="scoreView" class="hidden">
+      <p class="section-title">Výsledky</p>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Tým</th>
+            <th>Body</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+      <button id="btnContinueRound" class="btn btn-primary">Pokračovat</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ----------- Pár ukázkových pojmů -----------
-  const WORDS = {
-  easy: {
-    draw: [
-      "Auto","Pes","Dům","Strom","Míč","Kočka","Slunce","Květina","Kolo","Loď",
-      "Hora","Řeka","Most","Škola","Telefon","Počítač","Stůl","Židle","Kniha","Pero",
-      "Okno","Dveře","Postel","Hrnek","Talíř","Lžíce","Vidlička","Nůž","Taška","Batoh",
-      "Deštník","Čepice","Bota","Kabát","Tričko","Kalhoty","Hodiny","Kalendář","Mapa","Vlajka",
-      "Město","Vesnice","Zahrada","Plot","Košík","Jablko","Hruška","Banán","Pomeranč","Mrkev",
-      "Brambora","Chléb","Rohlík","Sýr","Mléko","Voda","Džus","Zmrzlina","Dort","Svíčka",
-      "Balon","Krabice","Kostka","Kruh","Čára","Bod","Autojeřáb","Semafor","Silnice","Přechod",
-      "Letadlo","Vlak","Autobus","Motorka","Traktor","Kolohrad","Hřiště","Houpačka","Skluzavka","Písek",
-      "Květ","List","Tráva","Mrak","Déšť","Sníh","Led","Vítr","Blesk","Duha"
-    ],
-    act: [
-      "Běh","Skok","Chůze","Plavání","Tancování","Smích","Pláč","Jídlo","Pití","Spaní",
-      "Čtení","Psaní","Kreslení","Malování","Zívání","Protahování","Sezení","Stání","Lezení","Skákání",
-      "Tleskání","Mávaní","Volání","Mluvení","Šeptání","Kýchání","Kašlání","Dýchání","Zívnutí","Usínání",
-      "Buzení","Mytí","Česání","Oblékání","Svlékání","Vaření","Pečení","Krájení","Míchání","Ochutnávání",
-      "Balení","Nesení","Tlačení","Tahání","Házení","Chytání","Kopání","Jízda","Brzdění","Zrychlení",
-      "Zastavení","Otevírání","Zavírání","Zapínání","Vypínání","Kliknutí","Psaníčko","Voláníčko","Úsměv","Mračení",
-      "Ukazování","Počítání","Sčítání","Odčítání","Násobení","Dělení","Zpěv","Poslech","Hraní","Cvičení",
-      "Běhání","Skákáníčko","Ležení","Sedění","Stáníčko","Pozorování","Koukání","Dívání","Hledání","Nacházení",
-      "Uklízení","Zametání","Utírání","Leštění","Zalévání","Sázení","Trhání","Sbírání","Vynášení","Vracejí"
-    ],
-    explain: [
-      "Rodina","Škola","Domov","Přátelství","Láska","Hra","Práce","Odpočinek","Spánek","Jídlo",
-      "Pití","Zábava","Sport","Hudba","Film","Kniha","Pohádka","Příběh","Cesta","Výlet",
-      "Dovolená","Prázdniny","Učení","Zkouška","Známka","Úkol","Pomoc","Radost","Smutek","Strach",
-      "Vztek","Úsměv","Slza","Dar","Překvapení","Narozeniny","Svátek","Vánoce","Velikonoce","Oslava",
-      "Nákup","Obchod","Supermarket","Peníze","Cena","Platba","Úspory","Kapesné","Kredit","Dluh",
-      "Počasí","Teplo","Zima","Déšť","Sníh","Vítr","Bouře","Slunce","Mraky","Jaro",
-      "Léto","Podzim","Zima","Ráno","Poledne","Večer","Noc","Týden","Víkend","Den",
-      "Rok","Čas","Hodina","Minuta","Sekunda","Plán","Cíl","Úspěch","Chyba","Poučení"
-    ]
-  },
-
-  medium: {
-    draw: [
-      "Elektrárna","Mrakodrap","Letiště","Přístav","Robot","Laboratoř","Továrna","Muzeum","Katedrála","Hrad",
-      "Zámek","Stadion","Tunel","Mostovka","Silnice","Dálnice","Křižovatka","Kolejiště","Lokomotiva","Vagón",
-      "Družice","Rakoplán","Astronaut","Planeta","Galaxie","Kometa","Asteroid","Observatoř","Dalekohled","Mikroskop",
-      "Vulkan","Krater","Ledovec","Poušť","Oáza","Džungle","Savanna","Prales","Útes","Laguna",
-      "Korál","Ponorka","Maják","Pobřeží","Poloostrov","Ostrov","Souostroví","Mapa","Atlas","Kompas",
-      "Radar","Sonar","Anténa","Vysílač","Server","Datacentrum","Procesor","Čip","Obvod","Baterie",
-      "Transformátor","Generátor","Turbína","Ventilátor","Motor","Píst","Převodovka","Brzda","Spojka","Kolozubaté",
-      "Jeřáb","Výtah","Eskalátor","Semafor","Kamera","Projektor","Plátno","Reproduktor","Sluchátka","Mikrofon",
-      "Klávesnice","Myš","Monitor","Tablet","Mobil","Notebook","Router","Modem","Kabel","Zásuvka"
-    ],
-    act: [
-      "Analyzování","Pozorování","Porovnávání","Vyhodnocování","Rozhodování","Plánování","Organizování","Koordinování","Řízení","Programování",
-      "Kódování","Ladění","Testování","Optimalizace","Modelování","Simulování","Měření","Výpočty","Odhadování","Predikce",
-      "Vyjednávání","Argumentace","Diskutování","Prezentování","Vysvětlování","Interpretace","Shrnutí","Závěr","Dokazování","Odvozování",
-      "Navrhování","Konstrukce","Montování","Demontování","Sestavování","Oprava","Údržba","Servisování","Diagnostika","Kalibrace",
-      "Experimentování","Pozorování","Zaznamenávání","Vyhodnocení","Publikování","Archivace","Třídění","Kategorizace","Indexování","Vyhledávání",
-      "Zabezpečení","Šifrování","Dekódování","Autentizace","Autorizace","Zálohování","Obnova","Migrace","Synchronizace","Aktualizace",
-      "Školení","Vzdělávání","Studování","Učení","Zapamatování","Procvičování","Opakování","Zkoušení","Hodnocení","Sebehodnocení",
-      "Spolupráce","Kooperace","Koalice","Moderování","Facilitace","Mediace","Konzultace","Poradenství","Mentoring","Koučování"
-    ],
-    explain: [
-      "Demokracie","Republika","Monarchie","Ekologie","Biologie","Chemie","Fyzika","Astronomie","Geografie","Historie",
-      "Ekonomie","Inflace","Deflace","Trh","Nabídka","Poptávka","Konkurence","Monopol","Globalizace","Migrace",
-      "Urbanizace","Industrializace","Digitalizace","Automatizace","Robotizace","Internet","Algoritmus","Databáze","Síť","Protokol",
-      "Bezpečnost","Soukromí","Identita","Etika","Morálka","Právo","Zákon","Ústava","Soud","Spravedlnost",
-      "Svoboda","Rovnost","Solidarita","Odpovědnost","Tolerance","Diskriminace","Inkluze","Diverzita","Empatie","Komunikace",
-      "Motivace","Inspirace","Kreativita","Inovace","Strategie","Taktika","Cíl","Vize","Mise","Plánování",
-      "Riziko","Krize","Stabilita","Růst","Pokrok","Udržitelnost","Recyklace","Energie","Zdroje","Spotřeba",
-      "Zdraví","Nemoc","Prevence","Léčba","Vakcína","Imunita","Pandemie","Epidemie","Diagnóza","Terapie"
-    ]
-  },
-
-  hard: {
-    draw: [
-      "Paradox","Nekonečno","Iluzionismus","Labyrint","Metamorfóza","Dualita","Entropie","Singularita","Symetrie","Asymetrie",
-      "Fraktál","Hyperkrychle","Möbius","Kleinova","Topologie","Dimenze","Multivesmír","Časoprostor","Relativita","Kvantování",
-      "Superpozice","Provázanost","Kolaps","Determinismus","Chaos","Emergence","Komplexita","Abstrakce","Symbolismus","Minimalismus",
-      "Surrealismus","Kubismus","Impresionismus","Expresionismus","Futurismus","Konstruktivismus","Dekonstrukce","Palimpsest","Metanarativ","Intertextualita",
-      "Simulakrum","Hyperrealita","Transcendence","Imanence","Dialektika","Fenomenologie","Hermeneutika","Ontologie","Epistemologie","Axiologie",
-      "Eschatologie","Teleologie","Metafyzika","Kosmologie","Antinomie","Apofáze","Katabáze","Anabáze","Anamnéze","Letargie",
-      "Nostalgie","Melancholie","Ambivalence","Disonance","Kontradikce","Ironie","Parodie","Satira","Groteska","Allegorie",
-      "Metonymie","Synekdocha","Oxymóron","Hyperbola","Litotes","Anacoluthon","Palindrom","Anagram","Rekurze","Iterace"
-    ],
-    act: [
-      "Meditování","Kontemplace","Sebereflexe","Introspekce","Transcendování","Dezinterpretace","Reinterpretace","Dekonstrukce","Syntetizace","Abstrahování",
-      "Generalizace","Specifikace","Formalizace","Axiomatizace","Modelování","Simulace","Idealizace","Approximation","Limitování","Interpolace",
-      "Extrapolace","Optimalizování","Minimalizace","Maximalizace","Stochastika","Randomizace","Determinace","Korelací","Regrese","Predikování",
-      "Validace","Verifikace","Falzifikace","Argumentování","Protiargumentace","Polemování","Diskurz","Narrativizace","Kontextualizace","Dezkontextualizace",
-      "Symbolizace","Signifikace","Denotace","Konotace","Kodifikace","Dekodifikace","Normalizace","Standardizace","Hierarchizace","Strukturalizace",
-      "Segmentace","Agregace","Disagregace","Klasifikace","Typologizace","Taxonomie","Systematizace","Metodologie","Operationalizace","Implementace",
-      "Evaluace","Revize","Refaktoring","Iterování","Rekurzování","Paralelizace","Synchronizace","Asynchronizace","Optimalizování","Balancování",
-      "Moderování","Facilitování","Mediování","Arbitrování","Vyvažování","Strategizování","Taktizování","Anticipace","Adaptování","Transformování"
-    ],
-    explain: [
-      "Svědomí","Existence","Identita","Subjektivita","Objektivita","Smysl","Bytí","Nicota","Vědomí","Nevědomí",
-      "Svoboda","Nutnost","Determinismus","Kauzalita","Náhoda","Pravda","Lež","Poznání","Víra","Skepticismus",
-      "Racionalismus","Empirismus","Idealismus","Materialismus","Realismus","Relativismus","Absolutno","Transcendence","Imanence","Dualismus",
-      "Monismus","Pluralismus","Paradigma","Diskurz","Narrativ","Interpretace","Hermeneutika","Fenomen","Esence","Existencialismus",
-      "Autenticita","Odvaha","Odpovědnost","Úzkost","Samota","Odvaha","Zrada","Vina","Odpouštění","Smíření",
-      "Spravedlnost","Moc","Autorita","Legitimita","Manipulace","Propaganda","Ideologie","Dogma","Hereze","Fanatismus",
-      "Civilizace","Kultura","Tradice","Paměť","Historie","Pokrok","Úpadek","Krize","Transformace","Revoluce",
-      "Utopie","Dystopie","Apokalypsa","Eschaton","Spása","Naděje","Beznaděj","Víra","Smrt","Nesmrtelnost"
-    ]
+  function list(text){
+    return text.trim().split(/\n+/).map(item => item.trim()).filter(Boolean);
   }
-};
 
-  const POINTS_FOR_DIFF = { easy:1, medium:2, hard:3 };
-  const DIFF_LABELS = {
-    easy:"Lehká – 1 bod",
-    medium:"Střední – 2 body",
-    hard:"Těžká – 3 body"
+  const WORDS = {
+    draw: list(`
+      auto
+      dům
+      pes
+      kočka
+      strom
+      slunce
+      měsíc
+      hvězda
+      mrak
+      déšť
+      sněhulák
+      hora
+      řeka
+      most
+      loď
+      vlak
+      letadlo
+      autobus
+      kolo
+      motorka
+      semafor
+      přechod
+      zebra
+      hřiště
+      houpačka
+      skluzavka
+      míč
+      branka
+      stadion
+      bazén
+      pláž
+      stan
+      batoh
+      mapa
+      kompas
+      dalekohled
+      foťák
+      mobil
+      televize
+      rádio
+      počítač
+      klávesnice
+      myš
+      sluchátka
+      reproduktor
+      mikrofon
+      kniha
+      noviny
+      dopis
+      obálka
+      tužka
+      pero
+      štětec
+      nůžky
+      lepidlo
+      pravítko
+      školní lavice
+      tabule
+      hodiny
+      budík
+      postel
+      polštář
+      deka
+      skříň
+      židle
+      stůl
+      gauč
+      lampa
+      okno
+      dveře
+      klíč
+      zámek
+      schody
+      výtah
+      zahrada
+      plot
+      brána
+      květina
+      list
+      houba
+      jablko
+      hruška
+      banán
+      jahoda
+      mrkev
+      brambora
+      pizza
+      dort
+      zmrzlina
+      hrnek
+      talíř
+      lžíce
+      vidlička
+      nůž
+      pánev
+      hrnec
+      lednice
+      trouba
+      koš
+      koště
+      deštník
+      čepice
+      boty
+      rukavice
+      brýle
+      hodinky
+      koruna
+      prsten
+      kabelka
+      peněženka
+      duha
+      blesk
+      oheň
+      svíčka
+      balón
+      drak
+      robot
+      raketa
+      planeta
+      sopka
+      hrad
+      kostel
+      věž
+      tunel
+      jeskyně
+      ostrov
+      maják
+      ponorka
+      pirát
+      koráb
+      poklad
+      trůn
+      meč
+      štít
+      kouzelník
+      čarodějnice
+      duch
+      kostra
+      lev
+      slon
+      žirafa
+      opice
+      medvěd
+      tučňák
+      velryba
+      delfín
+      žralok
+      motýl
+      včela
+      pavouk
+      šnek
+      želva
+      had
+      žába
+      sova
+      orel
+      kachna
+      slepice
+      traktor
+      sanitka
+      hasiči
+      policie
+      popelnice
+      bankomat
+      lékárna
+      pošta
+      knihovna
+      kino
+      kolotoč
+      ruské kolo
+      lízátko
+      čokoláda
+      sendvič
+      hamburger
+      meloun
+      nanuk
+      vánoční stromek
+      dárek
+    `),
+    act: list(`
+      brusle
+      lyže
+      snowboard
+      sáňky
+      kolo
+      koloběžka
+      skateboard
+      míč
+      branka
+      tenisová raketa
+      hokejka
+      činka
+      švihadlo
+      luk
+      šíp
+      rybářský prut
+      stan
+      batoh
+      spacák
+      mapa
+      kompas
+      dalekohled
+      fotoaparát
+      mobil
+      sluchátka
+      mikrofon
+      kytara
+      housle
+      buben
+      klavír
+      trumpeta
+      dirigent
+      zpěvák
+      herec
+      tanečník
+      kouzelník
+      klaun
+      mim
+      pirát
+      rytíř
+      král
+      královna
+      princ
+      princezna
+      čaroděj
+      detektiv
+      zloděj
+      policista
+      hasič
+      záchranář
+      doktor
+      sestřička
+      zubař
+      veterinář
+      kuchař
+      číšník
+      prodavač
+      pokladní
+      řidič autobusu
+      taxikář
+      pilot
+      kapitán
+      námořník
+      strojvedoucí
+      pošťák
+      popelář
+      zahradník
+      farmář
+      zedník
+      malíř pokojů
+      elektrikář
+      instalatér
+      automechanik
+      truhlář
+      kovář
+      kominík
+      uklízečka
+      kadeřník
+      holič
+      učitel
+      žák
+      rozhodčí
+      trenér
+      moderátor
+      kameraman
+      fotograf
+      youtuber
+      programátor
+      vědec
+      kosmonaut
+      robot
+      miminko
+      stařec
+      turista
+      horolezec
+      plavec
+      potápěč
+      lyžař
+      bruslař
+      cyklista
+      běžec
+      boxer
+      brankář
+      baletka
+      jogín
+      voják
+      lukostřelec
+      rybář
+      myslivec
+      čert
+      anděl
+      duch
+      upír
+      zombie
+      vlkodlak
+      dinosaurus
+      opice
+      slon
+      žirafa
+      lev
+      medvěd
+      tučňák
+      žába
+      had
+      pes
+      kočka
+      slepice
+      kachna
+      sova
+      pavouk
+      včela
+      šnek
+      kartáček
+      hřeben
+      ručník
+      mýdlo
+      deštník
+      kufr
+      těžká taška
+      nákupní vozík
+      kladivo
+      šroubovák
+      pila
+      lopata
+      koště
+      vysavač
+      hadr
+      žehlička
+      vařečka
+      pánev
+      hrnec
+      nůž
+      vidlička
+      lžíce
+      talíř
+      sklenice
+      brčko
+      banán
+      špagety
+      dort
+      svíčka
+      dárek
+      balónek
+      noviny
+      kniha
+      tabule
+      lavice
+      tahák
+      lístek
+      peněženka
+      platební karta
+      volant
+      klíče
+      kufr auta
+      benzínová pumpa
+      semafor
+      vlak
+      letadlo
+      loď
+      traktor
+      sanitka
+      hasičská hadice
+      pouta
+      lupa
+      stetoskop
+      injekce
+      teploměr
+      náplast
+      štětec
+      váleček
+      hřebík
+      cihla
+      žebřík
+      foťák na selfie
+    `),
+    explain: list(`
+      rodina
+      kamarád
+      soused
+      učitel
+      doktor
+      hasič
+      policista
+      kuchař
+      řidič
+      herec
+      zpěvák
+      sportovec
+      turista
+      průvodce
+      zákazník
+      prodavač
+      dítě
+      dospělý
+      babička
+      dědeček
+      domov
+      škola
+      práce
+      dovolená
+      výlet
+      oslava
+      svatba
+      narozeniny
+      Vánoce
+      Velikonoce
+      ráno
+      večer
+      víkend
+      prázdniny
+      počasí
+      bouřka
+      horko
+      zima
+      mlha
+      vítr
+      štěstí
+      smutek
+      strach
+      vztek
+      překvapení
+      nuda
+      trapnost
+      odvaha
+      lenost
+      trpělivost
+      pravda
+      lež
+      tajemství
+      slib
+      omluva
+      rada
+      pomoc
+      problém
+      řešení
+      plán
+      pravidlo
+      soutěž
+      výhra
+      prohra
+      remíza
+      tým
+      kapitán
+      rozhodčí
+      trest
+      odměna
+      peníze
+      sleva
+      účtenka
+      pokladna
+      obchod
+      restaurace
+      jídelní lístek
+      objednávka
+      spropitné
+      reklama
+      internet
+      heslo
+      fotka
+      video
+      zpráva
+      telefonát
+      aplikace
+      nabíječka
+      baterie
+      signál
+      autoškola
+      dopravní zácpa
+      jízdenka
+      zastávka
+      nádraží
+      letiště
+      hotel
+      pokoj
+      recepce
+      kufr
+      kemp
+      stan
+      oheň
+      piknik
+      stezka
+      rozcestník
+      mapa
+      poklad
+      dobrodružství
+      výhled
+      kuchyně
+      oběd
+      snídaně
+      večeře
+      dezert
+      recept
+      koření
+      hlad
+      žízeň
+      chuť
+      kino
+      divadlo
+      koncert
+      písnička
+      pohádka
+      detektivka
+      komedie
+      horor
+      vtip
+      potlesk
+      nemoc
+      lékař
+      čekárna
+      teploměr
+      lék
+      náplast
+      sanitka
+      zdraví
+      únava
+      spánek
+      město
+      vesnice
+      náměstí
+      ulice
+      park
+      hřiště
+      knihovna
+      kostel
+      hrad
+      zámek
+      moře
+      les
+      louka
+      hora
+      řeka
+      ostrov
+      poušť
+      džungle
+      vesmír
+      planeta
+      čas
+      minuta
+      hodina
+      kalendář
+      vzpomínka
+      budoucnost
+      náhoda
+      štěstí ve hře
+      sázka
+      dohoda
+      dárek
+      přání
+      pozvánka
+      návštěva
+      úklid
+      nepořádek
+      oprava
+      stěhování
+      rekord
+      výmluva
+      sousedství
+      domácnost
+      zahrada
+      balkon
+      garáž
+      půda
+      sklep
+      chodba
+      výtah
+      schody
+      klíč
+      zámek dveří
+      alarm
+      kamera
+      plot
+      brána
+      poštovní schránka
+      popelnice
+      recyklace
+      odpad
+      návod
+      záruka
+      porucha
+      baterka
+      zásuvka
+      prodlužovačka
+      žárovka
+      vypínač
+      topení
+      klimatizace
+      ventilátor
+      lednice
+      pračka
+      myčka
+      vysavač
+      žehlička
+      ručník
+      peřina
+      polštář
+      matrace
+      budík
+      noční můra
+      sen
+      tajný plán
+      překlep
+      chyba
+      náhoda
+      smůla
+      klika
+      odveta
+      výzva
+      zkouška
+      úkol
+      známka
+      vysvědčení
+      prázdná lavice
+      školní výlet
+      školní jídelna
+      přestávka
+      zvonění
+      tělocvik
+      hřiště
+      šatna
+      učebnice
+      sešit
+      tahák
+      kalkulačka
+      pravítko
+      kružítko
+      tabule
+      křída
+      fix
+      houba na tabuli
+      domácí úkol
+      zkoušení
+      písemka
+      skupinová práce
+      prezentace
+      projekt
+      týmová práce
+      nápad
+      inspirace
+      kreativita
+      fantazie
+      improvizace
+      pravidla hry
+      férovost
+      podvod
+      strategie
+      taktika
+      risk
+      odvaha
+      nervozita
+      soustředění
+      pauza
+      začátek
+      konec
+      pokračování
+      návrat
+      cesta
+      odbočka
+      zkratka
+      objížďka
+      dopravní značka
+      semafor
+      přechod
+      kruhový objezd
+      benzínová pumpa
+      parkoviště
+      garážové stání
+      pokuta
+      nehoda
+      zpoždění
+      vlak
+      autobus
+      tramvaj
+      metro
+      letadlo
+      kufr na kolečkách
+      pas
+      občanka
+      letenka
+      vstupenka
+      rezervace
+      fronta
+      pořadník
+      lístek
+      pokladna
+      bankomat
+      půjčka
+      dluh
+      spoření
+      rozpočet
+      výplata
+      účet
+      heslo k účtu
+      bankovní karta
+      hotovost
+      mince
+      bankovka
+      dražba
+      výprodej
+      bazar
+      reklamace
+      účtenka
+      balík
+      pošta
+      kurýr
+      adresa
+      zásilka
+      krabice
+      bublinková fólie
+      lepicí páska
+      dárek na poslední chvíli
+      překvapení v krabici
+      oslava narozenin
+      svatební dort
+      svatební kytice
+      rozlučka
+      hostina
+      přípitek
+      taneční parket
+      hudební skupina
+      reproduktor
+      mikrofon
+      sluchátka
+      playlist
+      karaoke
+      refrén
+      koncertní hala
+      kino s popcornem
+      titulky
+      dabing
+      herec ve filmu
+      režisér
+      kamera
+      scénář
+      hlavní hrdina
+      padouch
+      pointa
+      zápletka
+      pokračování filmu
+      knižní série
+      komiks
+      časopis
+      noviny
+      rozhovor
+      zprávy
+      předpověď počasí
+      bouřkový mrak
+      duha
+      náledí
+      lavina
+      povodeň
+      sucho
+      vedro
+      mráz
+      mlha na silnici
+      západ slunce
+      východ slunce
+      hvězdná obloha
+      úplněk
+      planeta Mars
+      raketa
+      astronaut
+      mimozemšťan
+      robot
+      umělá inteligence
+      počítačová hra
+      ovladač
+      klávesnice
+      myš
+      monitor
+      tablet
+      chytré hodinky
+      nabitý telefon
+      vybitý telefon
+      ztracený signál
+      pomalý internet
+      videohovor
+      skupinový chat
+      hlasová zpráva
+      samolepka
+      profilová fotka
+      lajky
+      komentář
+      sdílení
+      oznámení
+      spam
+      vir
+      aktualizace
+      záloha
+      složka
+      soubor
+      tiskárna
+      papír
+      kancelář
+      porada
+      šéf
+      kolega
+      pracovní pohovor
+      životopis
+      smlouva
+      podpis
+      razítko
+      úřad
+      formulář
+      čekací číslo
+      fronta na úřad
+      policie
+      hasiči
+      záchranka
+      nemocnice
+      operace
+      rentgen
+      lékárna
+      kapky do nosu
+      náplast na prst
+      berle
+      invalidní vozík
+      očkování
+      alergie
+      zubařské křeslo
+      sportovní zápas
+      fanoušek
+      dres
+      trenér
+      brankář
+      rozhodčí píšťalka
+      medaile
+      pohár
+      olympiáda
+      maraton
+      posilovna
+      bazén
+      sprcha
+      ručník
+      plavky
+      brýle do vody
+      opalovací krém
+      plážový míč
+      mušle
+      písek v botě
+      stanování
+      táborák
+      špekáček
+      spacák
+      komár
+      klíště
+      turistická značka
+      rozhledna
+      lanovka
+      horská chata
+      sněhová koule
+      lyžařská helma
+      brusle na led
+      vánoční cukroví
+      kapr
+      adventní kalendář
+      velikonoční pomlázka
+      malované vajíčko
+      apríl
+      silvestr
+      ohňostroj
+      novoroční předsevzetí
+      narozeninová svíčka
+      dort se šlehačkou
+      zmrzlina v kornoutu
+      lízátko
+      žvýkačka
+      popcorn
+      pizza
+      hamburger
+      hranolky
+      salát
+      polévka
+      káva
+      čaj
+      limonáda
+      brčko
+      sklenice vody
+      příbor
+      talíř
+      hrnec
+      pánev
+      vařečka
+      kuchařská čepice
+      zástěra
+      recept na buchtu
+      připálené jídlo
+      hladový host
+      domácí mazlíček
+      vodítko
+      miska pro psa
+      kočičí záchod
+      akvárium
+      klec
+      veterinář
+      krmení
+      blecha
+      psí bouda
+      ptačí budka
+      mraveniště
+      včelí úl
+      pavučina
+      šnečí ulita
+      želví krunýř
+      tygří pruhy
+      sloní chobot
+      žirafí krk
+      opičí grimasa
+    `)
   };
+
   const MODE_LABELS = {
     draw:"Kreslení",
     act:"Pantomima",
     explain:"Vysvětlování"
   };
 
-  // ---------- Stav hry ----------
+  const MODE_HINTS = {
+    draw:"kresli bez mluvení",
+    act:"předváděj beze slov",
+    explain:"popisuj bez kořene slova"
+  };
+
+  const GAME_TYPE_TEXTS = {
+    classic:"Klasika: tým si vybere kategorii, dostane jeden pojem a po vyhodnocení se ukážou výsledky.",
+    timed:"Na čas: tým si vybere kategorii a během jednoho času hádá co nejvíc pojmů. Uhodli = +1 bod, neuhodli = -1 bod.",
+    mixed:"Mix limitů: tým si vybere jednu kategorii a jede další pojmy stejného typu, dokud nedosáhne limitu nebo nedojde čas.",
+    custom:"Vlastní pojmy: každý tým napíše svoje pojmy. Potom vyberete Klasiku, Na čas nebo Mix limitů."
+  };
+
   let teams = [];
   let currentTeamIndex = 0;
-  let selectedDiff = null;
+  let gameType = null;
+  let customWordsMode = false;
+  let customEntryIndex = 0;
+  let customWordEntries = [];
+  let wordPool = null;
   let selectedMode = null;
   let timerId = null;
   let timeLeft = 60;
-  let baseDuration = 60;   // <<< výchozí délka kola
+  let baseDuration = 60;
   let roundRunning = false;
   let wordPrepared = false;
+  let currentTurnStarted = false;
+  let usedWords = new Set();
+  let mixedRemaining = { draw:0, act:0, explain:0 };
 
-  // Web Audio – delší pípnutí
   let audioContext = null;
   function playEndSound(){
     try{
@@ -516,7 +1479,7 @@
       osc.type = "square";
       osc.frequency.setValueAtTime(900, now);
       osc.frequency.linearRampToValueAtTime(600, now + 0.5);
-      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.setValueAtTime(0.3, now);
       gain.gain.linearRampToValueAtTime(0.01, now + 0.9);
       osc.connect(gain);
       gain.connect(audioContext.destination);
@@ -525,35 +1488,46 @@
     }catch(e){}
   }
 
-  // ---------- Elementy ----------
   const setupScreen = document.getElementById("setupScreen");
+  const wordSetupScreen = document.getElementById("wordSetupScreen");
   const gameScreen  = document.getElementById("gameScreen");
+  const gameTypeButtons = document.getElementById("gameTypeButtons");
+  const gameTypeHelp = document.getElementById("gameTypeHelp");
+  const wordSetupTeamName = document.getElementById("wordSetupTeamName");
+  const customDrawInput = document.getElementById("customDrawInput");
+  const customActInput = document.getElementById("customActInput");
+  const customExplainInput = document.getElementById("customExplainInput");
+  const customDrawCount = document.getElementById("customDrawCount");
+  const customActCount = document.getElementById("customActCount");
+  const customExplainCount = document.getElementById("customExplainCount");
+  const customGameChoice = document.getElementById("customGameChoice");
+  const customGameTypeButtons = document.getElementById("customGameTypeButtons");
+  const btnNextWordTeam = document.getElementById("btnNextWordTeam");
   const teamsContainer = document.getElementById("teamsContainer");
   const btnAddTeam = document.getElementById("btnAddTeam");
   const btnStartGame = document.getElementById("btnStartGame");
-
-  const scoreboardEl = document.getElementById("scoreboard");
-  const leaderDisplay = document.getElementById("leaderDisplay");
   const currentTeamNameEl = document.getElementById("currentTeamName");
-
-  const diffButtonsWrap = document.getElementById("diffButtons");
   const modeButtonsWrap = document.getElementById("modeButtons");
-  const choiceHint = document.getElementById("choiceHint");
-
+  const limitPanel = document.getElementById("limitPanel");
+  const drawLimitInput = document.getElementById("drawLimitInput");
+  const actLimitInput = document.getElementById("actLimitInput");
+  const explainLimitInput = document.getElementById("explainLimitInput");
+  const drawModeHint = document.getElementById("drawModeHint");
+  const actModeHint = document.getElementById("actModeHint");
+  const explainModeHint = document.getElementById("explainModeHint");
   const selectView = document.getElementById("selectView");
   const turnView = document.getElementById("turnView");
-
-  const cardTeamName = document.getElementById("cardTeamName");
-  const cardDiffLabel = document.getElementById("cardDiffLabel");
+  const scoreView = document.getElementById("scoreView");
+  const resultsBody = document.getElementById("resultsBody");
   const currentWordEl = document.getElementById("currentWord");
   const timerInput = document.getElementById("timerInput");
   const btnStartTurn = document.getElementById("btnStartTurn");
   const resultButtons = document.getElementById("resultButtons");
   const btnGuessed = document.getElementById("btnGuessed");
   const btnNotGuessed = document.getElementById("btnNotGuessed");
+  const btnContinueRound = document.getElementById("btnContinueRound");
   const infoText = document.getElementById("infoText");
 
-  // ---------- Nastavení týmů ----------
   function addTeamRow(initialName = ""){
     const row = document.createElement("div");
     row.className = "team-row";
@@ -562,152 +1536,422 @@
     input.placeholder = "Název týmu";
     input.value = initialName;
     input.addEventListener("input", validateStartButton);
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "btn btn-remove-team";
+    removeButton.textContent = "×";
+    removeButton.setAttribute("aria-label", "Odebrat tým");
+    removeButton.addEventListener("click", () => {
+      row.remove();
+      validateStartButton();
+    });
     row.appendChild(input);
+    row.appendChild(removeButton);
     teamsContainer.appendChild(row);
+    updateRemoveButtons();
   }
 
   function getTeamNames(){
-    const inputs = teamsContainer.querySelectorAll("input");
-    const names = [];
-    inputs.forEach(i=>{
-      const n = i.value.trim();
-      if(n) names.push(n);
-    });
-    return names;
+    return [...teamsContainer.querySelectorAll("input")]
+      .map(input => input.value.trim())
+      .filter(Boolean);
   }
 
   function validateStartButton(){
-    const names = getTeamNames();
-    btnStartGame.disabled = names.length < 2;
+    btnStartGame.disabled = getTeamNames().length < 2 || (!gameType && !customWordsMode);
+    btnStartGame.textContent = customWordsMode ? "Zadat pojmy" : "Start hry";
+    updateRemoveButtons();
+  }
+
+  function updateRemoveButtons(){
+    const rows = [...teamsContainer.querySelectorAll(".team-row")];
+    rows.forEach(row => {
+      const button = row.querySelector(".btn-remove-team");
+      if(button) button.disabled = rows.length <= 2;
+    });
   }
 
   function startGame(){
     const names = getTeamNames();
+    if(!gameType && !customWordsMode){
+      alert("Vyber typ hry.");
+      return;
+    }
     if(names.length < 2){
       alert("Zadej alespoň dva týmy.");
       return;
     }
-    teams = names.map(n=>({name:n, score:0}));
+    teams = names.map(name => ({ name, score:0 }));
+    if(customWordsMode){
+      startCustomWordEntry();
+      return;
+    }
+    wordPool = createBuiltInWordPool();
+    beginPlay();
+  }
+
+  function beginPlay(){
     currentTeamIndex = 0;
+    usedWords = new Set();
     setupScreen.classList.add("hidden");
+    wordSetupScreen.classList.add("hidden");
     gameScreen.classList.remove("hidden");
-    updateScoreboard();
     updateCurrentTeamLabel();
     resetForNewTurn();
   }
 
-  // ---------- Scoreboard ----------
-  function updateScoreboard(){
-    scoreboardEl.innerHTML = "";
-    let maxScore = -Infinity;
-    teams.forEach(t => { if(t.score > maxScore) maxScore = t.score; });
-    const leaders = teams.filter(t=>t.score === maxScore && maxScore>0);
+  function createBuiltInWordPool(){
+    return {
+      draw:WORDS.draw.map(text => ({ text, ownerIndex:null })),
+      act:WORDS.act.map(text => ({ text, ownerIndex:null })),
+      explain:WORDS.explain.map(text => ({ text, ownerIndex:null }))
+    };
+  }
 
-    teams.forEach((t,idx)=>{
-      const div = document.createElement("div");
-      div.className = "team-chip";
-      if(idx === currentTeamIndex) div.classList.add("current");
-      if(leaders.includes(t)) div.classList.add("leader-chip");
-      const nameSpan = document.createElement("span");
-      nameSpan.className = "name";
-      nameSpan.textContent = t.name;
-      const scoreSpan = document.createElement("span");
-      scoreSpan.className = "score";
-      scoreSpan.textContent = t.score + " b";
-      div.appendChild(nameSpan);
-      div.appendChild(scoreSpan);
-      scoreboardEl.appendChild(div);
+  function startCustomWordEntry(){
+    customEntryIndex = 0;
+    customWordEntries = teams.map(() => ({ draw:[], act:[], explain:[] }));
+    setupScreen.classList.add("hidden");
+    wordSetupScreen.classList.remove("hidden");
+    showCustomEntryTeam();
+  }
+
+  function parseCustomWords(text){
+    const seen = new Set();
+    return String(text || "")
+      .split(",")
+      .map(word => word.trim())
+      .filter(Boolean)
+      .filter(word => {
+        const key = normalizeWord(word);
+        if(seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+  }
+
+  function updateCustomCounts(){
+    customDrawCount.textContent = parseCustomWords(customDrawInput.value).length;
+    customActCount.textContent = parseCustomWords(customActInput.value).length;
+    customExplainCount.textContent = parseCustomWords(customExplainInput.value).length;
+  }
+
+  function saveCurrentCustomEntry(){
+    customWordEntries[customEntryIndex] = {
+      draw:parseCustomWords(customDrawInput.value),
+      act:parseCustomWords(customActInput.value),
+      explain:parseCustomWords(customExplainInput.value)
+    };
+    try{
+      localStorage.setItem("aktivityCustomWords", JSON.stringify({
+        savedAt:new Date().toISOString(),
+        teams:teams.map(team => team.name),
+        entries:customWordEntries
+      }));
+    }catch(e){}
+  }
+
+  function showCustomEntryTeam(){
+    const entry = customWordEntries[customEntryIndex] || { draw:[], act:[], explain:[] };
+    const isLastTeam = customEntryIndex === teams.length - 1;
+    wordSetupTeamName.textContent = teams[customEntryIndex].name;
+    customDrawInput.value = entry.draw.join(", ");
+    customActInput.value = entry.act.join(", ");
+    customExplainInput.value = entry.explain.join(", ");
+    customGameChoice.classList.toggle("hidden", !isLastTeam);
+    btnNextWordTeam.textContent = isLastTeam ? "Start hry" : "Další tým";
+    updateCustomCounts();
+  }
+
+  function createCustomWordPool(){
+    return {
+      draw:[],
+      act:[],
+      explain:[]
+    };
+  }
+
+  function buildCustomWordPool(){
+    const pool = createCustomWordPool();
+    customWordEntries.forEach((entry, ownerIndex) => {
+      ["draw", "act", "explain"].forEach(mode => {
+        entry[mode].forEach(text => pool[mode].push({ text, ownerIndex }));
+      });
     });
+    return pool;
+  }
 
-    if(maxScore <= 0){
-      leaderDisplay.textContent = "Vede: –";
-    }else if(leaders.length === 1){
-      leaderDisplay.textContent = "Vede: " + leaders[0].name + " (" + maxScore + " b)";
-    }else{
-      leaderDisplay.textContent = "Remíza – " + leaders.map(t=>t.name).join(", ") +
-                                  " (" + maxScore + " b)";
+  function continueCustomWordEntry(){
+    saveCurrentCustomEntry();
+    if(customEntryIndex < teams.length - 1){
+      customEntryIndex += 1;
+      showCustomEntryTeam();
+      return;
     }
+    if(!gameType){
+      alert("Vyber, jak budete hrát.");
+      return;
+    }
+    wordPool = buildCustomWordPool();
+    if(!wordPool.draw.length && !wordPool.act.length && !wordPool.explain.length){
+      alert("Nejdřív napište aspoň nějaké pojmy.");
+      return;
+    }
+    teams.forEach(team => { team.score = 0; });
+    beginPlay();
   }
 
   function updateCurrentTeamLabel(){
     currentTeamNameEl.textContent = teams[currentTeamIndex].name;
   }
 
-  // ---------- Přepínání pohledů ----------
   function showSelectView(){
     selectView.classList.remove("hidden");
     turnView.classList.add("hidden");
+    scoreView.classList.add("hidden");
+    updateLimitControls();
+    updateModeButtons();
   }
+
   function showTurnView(){
     selectView.classList.add("hidden");
     turnView.classList.remove("hidden");
+    scoreView.classList.add("hidden");
+  }
+
+  function showScoreView(){
+    selectView.classList.add("hidden");
+    turnView.classList.add("hidden");
+    scoreView.classList.remove("hidden");
   }
 
   function resetForNewTurn(){
-    selectedDiff = null;
     selectedMode = null;
     wordPrepared = false;
     roundRunning = false;
+    currentTurnStarted = false;
+    mixedRemaining = { draw:0, act:0, explain:0 };
     stopTimer();
     timerInput.disabled = false;
-    // *tady* vracíme čas zpět na poslední nastavený limit
     setTimerDisplay(baseDuration);
     infoText.textContent = "";
     resultButtons.classList.add("hidden");
     btnStartTurn.classList.remove("hidden");
-    choiceHint.textContent = "Vyber obtížnost i typ úkolu – poté se ukáže pojem na samostatné obrazovce.";
-    [...diffButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.remove("btn-choice-active"));
-    [...modeButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.remove("btn-choice-active"));
+    [...modeButtonsWrap.querySelectorAll("button")].forEach(btn => btn.classList.remove("btn-choice-active"));
     showSelectView();
   }
 
-  function pickWord(diff, mode){
-    const arr = WORDS[diff][mode];
-    if(!arr || arr.length === 0) return "DOPLŇ POJMY 🙂";
-    const idx = Math.floor(Math.random() * arr.length);
-    return arr[idx];
+  function shuffle(items){
+    const arr = [...items];
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function normalizeWord(word){
+    return String(word).trim().toLowerCase();
+  }
+
+  function availableWords(mode){
+    const pool = wordPool || createBuiltInWordPool();
+    return pool[mode].filter(item => {
+      const key = normalizeWord(item.text);
+      const ownWord = item.ownerIndex !== null && item.ownerIndex === currentTeamIndex;
+      return !usedWords.has(key) && !ownWord;
+    });
+  }
+
+  function pickWord(mode){
+    const available = availableWords(mode);
+    if(available.length === 0) return null;
+    const item = available[Math.floor(Math.random() * available.length)];
+    usedWords.add(normalizeWord(item.text));
+    return item.text;
+  }
+
+  function readLimit(input){
+    const value = parseInt(input.value, 10);
+    if(isNaN(value)) return 0;
+    return Math.max(0, Math.min(20, value));
+  }
+
+  function readMixedLimits(){
+    return {
+      draw:readLimit(drawLimitInput),
+      act:readLimit(actLimitInput),
+      explain:readLimit(explainLimitInput)
+    };
+  }
+
+  function totalMixedRemaining(){
+    return mixedRemaining.draw + mixedRemaining.act + mixedRemaining.explain;
+  }
+
+  function hasPlayableMode(){
+    return ["draw", "act", "explain"].some(mode => availableWords(mode).length > 0 && getModeLimit(mode) > 0);
+  }
+
+  function setupMixedTurnIfNeeded(){
+    if(gameType !== "mixed" || currentTurnStarted) return;
+    mixedRemaining = readMixedLimits();
+  }
+
+  function getModeLimit(mode){
+    if(gameType !== "mixed") return Infinity;
+    if(currentTurnStarted || wordPrepared) return mixedRemaining[mode];
+    return readMixedLimits()[mode];
+  }
+
+  function updateLimitControls(){
+    const isMixed = gameType === "mixed";
+    limitPanel.classList.toggle("hidden", !isMixed);
+    [drawLimitInput, actLimitInput, explainLimitInput].forEach(input => {
+      input.disabled = isMixed && (currentTurnStarted || wordPrepared);
+    });
+  }
+
+  function updateModeButtons(){
+    const hintEls = { draw:drawModeHint, act:actModeHint, explain:explainModeHint };
+    [...modeButtonsWrap.querySelectorAll("button")].forEach(button => {
+      const mode = button.dataset.mode;
+      const freeWords = availableWords(mode).length;
+      const limit = getModeLimit(mode);
+      const disabled = freeWords === 0 || limit <= 0;
+      button.disabled = disabled;
+      if(gameType === "mixed"){
+        hintEls[mode].textContent = currentTurnStarted || wordPrepared
+          ? "zbývá " + Math.max(0, limit)
+          : "max " + Math.max(0, limit);
+      }else if(gameType === "timed"){
+        hintEls[mode].textContent = "víc pojmů v jednom čase";
+      }else{
+        hintEls[mode].textContent = MODE_HINTS[mode];
+      }
+    });
   }
 
   function prepareRound(){
-    const team = teams[currentTeamIndex];
-    const word = pickWord(selectedDiff, selectedMode);
-    cardTeamName.textContent = team.name;
-    cardDiffLabel.textContent = DIFF_LABELS[selectedDiff] + " · " + MODE_LABELS[selectedMode];
+    setupMixedTurnIfNeeded();
+    if(gameType === "mixed"){
+      if(mixedRemaining[selectedMode] <= 0){
+        infoText.textContent = "Tahle kategorie už má vyčerpaný limit.";
+        updateModeButtons();
+        if(currentTurnStarted && !hasPlayableMode()) finishTurn();
+        return;
+      }
+      mixedRemaining[selectedMode] -= 1;
+    }
+
+    const word = pickWord(selectedMode);
+    if(!word){
+      infoText.textContent = "V této kategorii došly pojmy.";
+      updateModeButtons();
+      if(currentTurnStarted && gameType !== "classic") finishTurn();
+      return;
+    }
+
     currentWordEl.textContent = word;
     resultButtons.classList.add("hidden");
     btnStartTurn.classList.remove("hidden");
-    infoText.textContent = "Připravte se – až stisknete START, začne odpočítávání.";
+    infoText.textContent = "";
     timerInput.disabled = false;
     wordPrepared = true;
     roundRunning = false;
     stopTimer();
+    updateLimitControls();
+    if(currentTurnStarted && gameType !== "classic"){
+      btnStartTurn.classList.add("hidden");
+      resultButtons.classList.remove("hidden");
+      timerInput.disabled = true;
+      roundRunning = true;
+      startTimer();
+    }
     showTurnView();
   }
 
   function handleResult(guessed){
     if(!wordPrepared) return;
-    stopTimer();
-    roundRunning = false;
-    timerInput.disabled = false;
 
     const team = teams[currentTeamIndex];
-    const pts = POINTS_FOR_DIFF[selectedDiff];
     if(guessed){
-      team.score += pts;
-      infoText.textContent = team.name + " uhodli pojem a získávají " + pts + " bod(y)!";
-    }else{
-      infoText.textContent = team.name + " tentokrát body nezískávají.";
+      team.score += 1;
+    }else if(gameType !== "classic"){
+      team.score -= 1;
     }
-    updateScoreboard();
 
-    setTimeout(()=>{
-      currentTeamIndex = (currentTeamIndex + 1) % teams.length;
-      updateCurrentTeamLabel();
-      resetForNewTurn();
-    }, 1200);
+    wordPrepared = false;
+
+    if(gameType === "classic"){
+      finishTurn();
+      return;
+    }
+
+    if(timeLeft <= 0 || !roundRunning){
+      finishTurn();
+      return;
+    }
+
+    if(gameType === "timed"){
+      prepareRound();
+      return;
+    }
+
+    if(gameType === "mixed"){
+      if(mixedRemaining[selectedMode] <= 0){
+        finishTurn();
+        return;
+      }
+      prepareRound();
+      return;
+    }
+
+    if(totalMixedRemaining() <= 0){
+      finishTurn();
+      return;
+    }
+
+    selectedMode = null;
+    [...modeButtonsWrap.querySelectorAll("button")].forEach(btn => btn.classList.remove("btn-choice-active"));
+    resultButtons.classList.add("hidden");
+    btnStartTurn.classList.add("hidden");
+    showSelectView();
+    if(!hasPlayableMode()) finishTurn();
   }
 
-  // ---------- Timer ----------
+  function finishTurn(){
+    stopTimer();
+    roundRunning = false;
+    currentTurnStarted = false;
+    wordPrepared = false;
+    timerInput.disabled = false;
+    renderResults();
+    showScoreView();
+  }
+
+  function renderResults(){
+    const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
+    resultsBody.innerHTML = "";
+    [...teams]
+      .sort((a, b) => b.score - a.score || teams.indexOf(a) - teams.indexOf(b))
+      .forEach(team => {
+        const originalIndex = teams.indexOf(team);
+        const row = document.createElement("tr");
+        if(originalIndex === nextTeamIndex) row.className = "next";
+        row.innerHTML = `<td></td><td></td>`;
+        row.children[0].textContent = team.name;
+        row.children[1].textContent = team.score + " b";
+        resultsBody.appendChild(row);
+      });
+  }
+
+  function continueToNextRound(){
+    currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+    updateCurrentTeamLabel();
+    resetForNewTurn();
+  }
+
   function parseTimerValue(str){
     str = String(str || "").trim();
     if(!str) return 60;
@@ -716,19 +1960,17 @@
       const m = parseInt(mPart,10);
       const s = parseInt(sPart,10);
       if(isNaN(m) || isNaN(s)) return 60;
-      return Math.max(1, m*60 + s);
-    }else{
-      const sec = parseInt(str,10);
-      if(isNaN(sec) || sec<=0) return 60;
-      return sec;
+      return Math.max(1, m * 60 + s);
     }
+    const sec = parseInt(str,10);
+    return isNaN(sec) || sec <= 0 ? 60 : sec;
   }
 
   function formatTime(sec){
     sec = Math.max(0, Math.floor(sec));
-    const m = Math.floor(sec/60);
-    const s = sec%60;
-    return m + ":" + (s<10?"0"+s:s);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m + ":" + (s < 10 ? "0" + s : s);
   }
 
   function setTimerDisplay(sec){
@@ -736,11 +1978,12 @@
   }
 
   function startTimerFromInput(){
-    // uložíme výchozí délku kola podle toho, co je napsáno
     baseDuration = parseTimerValue(timerInput.value);
     timeLeft = baseDuration;
     setTimerDisplay(timeLeft);
     timerInput.disabled = true;
+    currentTurnStarted = true;
+    updateLimitControls();
     startTimer();
   }
 
@@ -754,20 +1997,21 @@
         audioContext = null;
       }
     }
-    timerId = setInterval(()=>{
+    timerId = setInterval(() => {
       timeLeft--;
+      setTimerDisplay(timeLeft);
       if(timeLeft <= 0){
-        timeLeft = 0;
-        setTimerDisplay(timeLeft);
         stopTimer();
         roundRunning = false;
         playEndSound();
-        infoText.textContent = "Čas vypršel! Rozhodněte, jestli uhodli nebo ne.";
         timerInput.disabled = false;
-      }else{
-        setTimerDisplay(timeLeft);
+        if(gameType === "classic"){
+          infoText.textContent = "Čas vypršel";
+        }else{
+          finishTurn();
+        }
       }
-    },1000);
+    }, 1000);
   }
 
   function stopTimer(){
@@ -777,42 +2021,63 @@
     }
   }
 
-  // ---------- Handlery ----------
-  btnAddTeam.addEventListener("click", ()=>addTeamRow(""));
+  gameTypeButtons.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if(!button) return;
+    customWordsMode = button.dataset.gameType === "custom";
+    gameType = customWordsMode ? null : button.dataset.gameType;
+    [...gameTypeButtons.querySelectorAll("button")]
+      .forEach(btn => btn.classList.toggle("btn-choice-active", btn === button));
+    [...customGameTypeButtons.querySelectorAll("button")]
+      .forEach(btn => btn.classList.remove("btn-choice-active"));
+    gameTypeHelp.textContent = GAME_TYPE_TEXTS[button.dataset.gameType];
+    validateStartButton();
+  });
+
+  customGameTypeButtons.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if(!button) return;
+    gameType = button.dataset.gameType;
+    [...customGameTypeButtons.querySelectorAll("button")]
+      .forEach(btn => btn.classList.toggle("btn-choice-active", btn === button));
+  });
+
+  btnAddTeam.addEventListener("click", () => addTeamRow(""));
   btnStartGame.addEventListener("click", startGame);
+  btnNextWordTeam.addEventListener("click", continueCustomWordEntry);
 
-  diffButtonsWrap.addEventListener("click", e=>{
-    if(!(e.target instanceof HTMLButtonElement)) return;
-    selectedDiff = e.target.dataset.diff;
-    [...diffButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.toggle("btn-choice-active", btn===e.target));
-    if(selectedDiff && selectedMode && !wordPrepared) prepareRound();
+  [customDrawInput, customActInput, customExplainInput].forEach(input => {
+    input.addEventListener("input", updateCustomCounts);
   });
 
-  modeButtonsWrap.addEventListener("click", e=>{
-    if(!(e.target instanceof HTMLButtonElement)) return;
-    selectedMode = e.target.dataset.mode;
-    [...modeButtonsWrap.querySelectorAll("button")].forEach(btn=>btn.classList.toggle("btn-choice-active", btn===e.target));
-    if(selectedDiff && selectedMode && !wordPrepared) prepareRound();
+  modeButtonsWrap.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if(!button || button.disabled) return;
+    selectedMode = button.dataset.mode;
+    [...modeButtonsWrap.querySelectorAll("button")]
+      .forEach(btn => btn.classList.toggle("btn-choice-active", btn === button));
+    if(selectedMode && !wordPrepared) prepareRound();
   });
 
-  btnStartTurn.addEventListener("click", ()=>{
+  btnStartTurn.addEventListener("click", () => {
     if(roundRunning) return;
     startTimerFromInput();
-    wordPrepared = true;
-    roundRunning = true;
     btnStartTurn.classList.add("hidden");
     resultButtons.classList.remove("hidden");
-    infoText.textContent = "Hrajte! Čas běží.";
+    infoText.textContent = gameType === "classic" ? "Čas běží" : "Uhodli +1, neuhodli -1";
   });
 
-  btnGuessed.addEventListener("click", ()=>handleResult(true));
-  btnNotGuessed.addEventListener("click", ()=>handleResult(false));
+  [drawLimitInput, actLimitInput, explainLimitInput].forEach(input => {
+    input.addEventListener("input", updateModeButtons);
+  });
 
-  // ---------- Inicializace ----------
+  btnGuessed.addEventListener("click", () => handleResult(true));
+  btnNotGuessed.addEventListener("click", () => handleResult(false));
+  btnContinueRound.addEventListener("click", continueToNextRound);
+
   addTeamRow("Tým 1");
   addTeamRow("Tým 2");
   validateStartButton();
-  baseDuration = 60;
   setTimerDisplay(baseDuration);
 </script>
 </body>
