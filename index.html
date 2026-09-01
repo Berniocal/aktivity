@@ -387,6 +387,21 @@
   #btnContinueRound{
     width:100%;
   }
+  .app-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .html-download{
+    padding:7px 10px;
+    font-size:12px;
+    color:var(--muted);
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--line);
+    box-shadow:none;
+  }
   @media (max-width:620px){
     .app{padding:12px}
     .screen{padding:14px;border-radius:16px}
@@ -399,7 +414,11 @@
 </head>
 <body>
 <div class="app">
-  <h1>Aktivity</h1>
+  <div class="app-header">
+    <h1>Aktivity</h1>
+    <!-- bernio-download-html -->
+    <button id="downloadHtmlBtn" class="btn html-download" type="button" title="Stáhnout tuto aplikaci jako samostatný HTML soubor">⬇️ Stáhnout HTML</button>
+  </div>
 
   <div id="setupScreen" class="screen">
     <p class="section-title">Typ hry</p>
@@ -1753,7 +1772,7 @@
 
   function shuffle(items){
     const arr = [...items];
-    for(let i = arr.length - 1; i > 0; i--){
+    for(let i = arr.length - 1;i>0;i--){
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
@@ -2031,6 +2050,19 @@
     }
   }
 
+  function downloadCurrentHtml(){
+    const html = '<!doctype html>\n' + document.documentElement.outerHTML;
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'aktivity.html';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
   gameTypeButtons.addEventListener("click", event => {
     const button = event.target.closest("button");
     if(!button) return;
@@ -2055,6 +2087,7 @@
   btnAddTeam.addEventListener("click", () => addTeamRow(""));
   btnStartGame.addEventListener("click", startGame);
   btnNextWordTeam.addEventListener("click", continueCustomWordEntry);
+  document.getElementById("downloadHtmlBtn").addEventListener("click", downloadCurrentHtml);
 
   [customDrawInput, customActInput, customExplainInput].forEach(input => {
     input.addEventListener("input", updateCustomCounts);
